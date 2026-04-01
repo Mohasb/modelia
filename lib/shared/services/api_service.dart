@@ -15,8 +15,6 @@ class ApiService {
 
   ApiService({required this.baseUrl});
 
-  // ── Headers ───────────────────────────────────────────────
-
   Map<String, String> get _headersPublic => {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -25,14 +23,15 @@ class ApiService {
   Future<Map<String, String>> get _headersAuth async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token') ?? '';
+    print(
+      '[API] Token: ${token.isEmpty ? "VACÍO" : "${token.substring(0, 20)}..."}',
+    );
     return {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
   }
-
-  // ── Gestión de tokens ─────────────────────────────────────
 
   Future<void> guardarTokens(AuthResponse auth) async {
     final prefs = await SharedPreferences.getInstance();
@@ -42,6 +41,7 @@ class ApiService {
     await prefs.setString('usuario_nombre', auth.nombre);
     await prefs.setString('usuario_rol', auth.rol);
     await prefs.setInt('usuario_id', auth.id);
+    print('[API] Tokens guardados para usuario_id: ${auth.id}');
   }
 
   Future<void> borrarTokens() async {
@@ -52,6 +52,7 @@ class ApiService {
     await prefs.remove('usuario_nombre');
     await prefs.remove('usuario_rol');
     await prefs.remove('usuario_id');
+    print('[API] Tokens borrados');
   }
 
   Future<bool> estaLogueado() async {
@@ -59,35 +60,30 @@ class ApiService {
     return prefs.getString('access_token') != null;
   }
 
-  Future<String?> getRol() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('usuario_rol');
-  }
-
-  Future<int?> getUsuarioId() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('usuario_id');
-  }
-
   Future<bool> _renovarToken() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final refreshToken = prefs.getString('refresh_token') ?? '';
-      if (refreshToken.isEmpty) return false;
-
+      if (refreshToken.isEmpty) {
+        print('[API] No hay refresh token');
+        return false;
+      }
+      print('[API] Intentando renovar token...');
       final response = await http.post(
         Uri.parse('$baseUrl/api/auth/refresh'),
         headers: _headersPublic,
         body: jsonEncode({'refreshToken': refreshToken}),
       );
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         await prefs.setString('access_token', data['accessToken']);
+        print('[API] Token renovado correctamente');
         return true;
       }
+      print('[API] Renovación fallida: ${response.statusCode}');
       return false;
     } catch (e) {
+      print('[API] Error renovando token: $e');
       return false;
     }
   }
@@ -97,41 +93,54 @@ class ApiService {
   ) async {
     var headers = await _headersAuth;
     var response = await peticion(headers);
+    print('[API] Respuesta: ${response.statusCode} - ${response.request?.url}');
 
     if (response.statusCode == 403 && !_cerrando) {
+      print('[API] 403 detectado, intentando renovar token...');
       final renovado = await _renovarToken();
       if (renovado) {
         headers = await _headersAuth;
         response = await peticion(headers);
+        print('[API] Reintento tras renovación: ${response.statusCode}');
       } else if (!_cerrando) {
+        print('[API] No se pudo renovar - sesión expirada');
         onSesionExpirada?.call();
       }
     }
     return response;
   }
 
-  // ── Manejo de errores ─────────────────────────────────────
-
   void _checkResponse(http.Response response) {
     if (response.statusCode >= 400) {
-      final body = jsonDecode(response.body);
-      throw Exception(body['mensaje'] ?? 'Error ${response.statusCode}');
+      print('[API] Error ${response.statusCode}: ${response.body}');
+      try {
+        final body = jsonDecode(response.body);
+        throw Exception(
+          body['mensaje'] ?? body['message'] ?? 'Error ${response.statusCode}',
+        );
+      } catch (e) {
+        if (e is Exception) rethrow;
+        throw Exception('Error ${response.statusCode}');
+      }
     }
   }
 
   // ── Auth ──────────────────────────────────────────────────
 
   Future<AuthResponse> login(String email, String password) async {
+    print('[API] POST /api/auth/login - email: $email');
     final response = await http.post(
       Uri.parse('$baseUrl/api/auth/login'),
       headers: _headersPublic,
       body: jsonEncode({'email': email, 'password': password}),
     );
+    print('[API] Login respuesta: ${response.statusCode} - ${response.body}');
     _checkResponse(response);
     return AuthResponse.fromJson(jsonDecode(response.body));
   }
 
   Future<String> register(String nombre, String email, String password) async {
+    print('[API] POST /api/auth/register - email: $email');
     final response = await http.post(
       Uri.parse('$baseUrl/api/auth/register'),
       headers: _headersPublic,
@@ -141,11 +150,15 @@ class ApiService {
         'password': password,
       }),
     );
+    print(
+      '[API] Register respuesta: ${response.statusCode} - ${response.body}',
+    );
     _checkResponse(response);
     return jsonDecode(response.body)['mensaje'];
   }
 
   Future<void> logout() async {
+    print('[API] Logout iniciado');
     _cerrando = true;
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refresh_token') ?? '';
@@ -158,11 +171,13 @@ class ApiService {
         .catchError((_) {});
     await borrarTokens();
     _cerrando = false;
+    print('[API] Logout completado');
   }
 
   // ── Categorias ────────────────────────────────────────────
 
   Future<List<Categoria>> getCategorias() async {
+    print('[API] GET /api/categorias');
     final response = await http.get(
       Uri.parse('$baseUrl/api/categorias'),
       headers: _headersPublic,
@@ -181,11 +196,10 @@ class ApiService {
     final params = <String, String>{};
     if (categoriaId != null) params['categoriaId'] = categoriaId.toString();
     if (nombre != null && nombre.isNotEmpty) params['nombre'] = nombre;
-
     final uri = Uri.parse(
       '$baseUrl/api/productos',
     ).replace(queryParameters: params.isNotEmpty ? params : null);
-
+    print('[API] GET $uri');
     final response = await http.get(uri, headers: _headersPublic);
     _checkResponse(response);
     final List<dynamic> data = jsonDecode(response.body);
@@ -193,6 +207,7 @@ class ApiService {
   }
 
   Future<Producto> getProductoById(int id) async {
+    print('[API] GET /api/productos/$id');
     final response = await http.get(
       Uri.parse('$baseUrl/api/productos/$id'),
       headers: _headersPublic,
@@ -204,6 +219,7 @@ class ApiService {
   // ── Pedidos ───────────────────────────────────────────────
 
   Future<Pedido> crearPedido(List<Map<String, dynamic>> items) async {
+    print('[API] POST /api/pedidos - items: ${items.length}');
     final response = await _ejecutar(
       (headers) => http.post(
         Uri.parse('$baseUrl/api/pedidos'),
@@ -211,16 +227,23 @@ class ApiService {
         body: jsonEncode({'items': items}),
       ),
     );
+    print(
+      '[API] Crear pedido respuesta: ${response.statusCode} - ${response.body}',
+    );
     _checkResponse(response);
     return Pedido.fromJson(jsonDecode(response.body));
   }
 
   Future<List<Pedido>> getMisPedidos() async {
+    print('[API] GET /api/pedidos/mis-pedidos');
     final response = await _ejecutar(
       (headers) => http.get(
         Uri.parse('$baseUrl/api/pedidos/mis-pedidos'),
         headers: headers,
       ),
+    );
+    print(
+      '[API] Mis pedidos: ${response.statusCode} - ${response.body.substring(0, response.body.length.clamp(0, 200))}',
     );
     _checkResponse(response);
     final List<dynamic> data = jsonDecode(response.body);
@@ -230,17 +253,18 @@ class ApiService {
   // ── Perfil ────────────────────────────────────────────────
 
   Future<Usuario> getPerfil() async {
+    print('[API] GET /api/usuario/perfil');
     final response = await _ejecutar(
       (headers) =>
           http.get(Uri.parse('$baseUrl/api/usuario/perfil'), headers: headers),
     );
-    print('PERFIL STATUS: ${response.statusCode}');
-    print('PERFIL BODY: ${response.body}');
+    print('[API] Perfil: ${response.statusCode} - ${response.body}');
     _checkResponse(response);
     return Usuario.fromJson(jsonDecode(response.body));
   }
 
   Future<Usuario> updatePerfil(String nombre, String? direccion) async {
+    print('[API] PUT /api/usuario/perfil');
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/usuario/perfil'),
@@ -255,6 +279,7 @@ class ApiService {
   // ── Admin: Productos ──────────────────────────────────────
 
   Future<Producto> crearProducto(Map<String, dynamic> datos) async {
+    print('[API] POST /api/admin/productos');
     final response = await _ejecutar(
       (headers) => http.post(
         Uri.parse('$baseUrl/api/admin/productos'),
@@ -267,6 +292,7 @@ class ApiService {
   }
 
   Future<Producto> editarProducto(int id, Map<String, dynamic> datos) async {
+    print('[API] PUT /api/admin/productos/$id');
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/productos/$id'),
@@ -279,6 +305,7 @@ class ApiService {
   }
 
   Future<void> borrarProducto(int id) async {
+    print('[API] DELETE /api/admin/productos/$id');
     final response = await _ejecutar(
       (headers) => http.delete(
         Uri.parse('$baseUrl/api/admin/productos/$id'),
@@ -291,6 +318,7 @@ class ApiService {
   // ── Admin: Categorias ─────────────────────────────────────
 
   Future<Categoria> crearCategoria(String nombre, String? descripcion) async {
+    print('[API] POST /api/admin/categorias');
     final response = await _ejecutar(
       (headers) => http.post(
         Uri.parse('$baseUrl/api/admin/categorias'),
@@ -305,6 +333,7 @@ class ApiService {
   // ── Admin: Pedidos ────────────────────────────────────────
 
   Future<List<Pedido>> getTodosPedidos() async {
+    print('[API] GET /api/admin/pedidos');
     final response = await _ejecutar(
       (headers) =>
           http.get(Uri.parse('$baseUrl/api/admin/pedidos'), headers: headers),
@@ -315,6 +344,7 @@ class ApiService {
   }
 
   Future<Pedido> cambiarEstadoPedido(int id, String estado) async {
+    print('[API] PUT /api/admin/pedidos/$id/estado -> $estado');
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/pedidos/$id/estado'),
@@ -329,6 +359,7 @@ class ApiService {
   // ── Admin: Usuarios ───────────────────────────────────────
 
   Future<List<Usuario>> getTodosUsuarios() async {
+    print('[API] GET /api/admin/usuarios');
     final response = await _ejecutar(
       (headers) =>
           http.get(Uri.parse('$baseUrl/api/admin/usuarios'), headers: headers),
@@ -339,6 +370,7 @@ class ApiService {
   }
 
   Future<Usuario> toggleActivoUsuario(int id) async {
+    print('[API] PUT /api/admin/usuarios/$id/toggle-activo');
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/usuarios/$id/toggle-activo'),
@@ -350,11 +382,12 @@ class ApiService {
   }
 
   Future<Usuario> cambiarRolUsuario(int id, String rol) async {
+    print('[API] PUT /api/admin/usuarios/$id/rol -> $rol');
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/usuarios/$id/rol'),
         headers: headers,
-        body: jsonEncode({'estado': rol}),
+        body: jsonEncode({'rol': rol}),
       ),
     );
     _checkResponse(response);

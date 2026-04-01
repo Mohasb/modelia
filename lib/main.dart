@@ -10,26 +10,23 @@ import 'package:modelia/core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final container = ProviderContainer(
-    overrides: [
-      apiServiceProvider.overrideWith((ref) {
-        final api = ApiService(
-          baseUrl: defaultTargetPlatform == TargetPlatform.android
-              ? 'http://192.168.1.39:8080'
-              : 'http://localhost:8080',
-        );
-        // Conectar el callback de sesión expirada
-        api.onSesionExpirada = () {
-          ref.read(authProvider.notifier).sesionExpirada();
-        };
-        return api;
-      }),
-    ],
-  );
-
   runApp(
-    UncontrolledProviderScope(container: container, child: const ModeliaApp()),
+    ProviderScope(
+      overrides: [
+        apiServiceProvider.overrideWith((ref) {
+          final api = ApiService(
+            baseUrl: defaultTargetPlatform == TargetPlatform.android
+                ? 'http://192.168.1.39:8080'
+                : 'http://localhost:8080',
+          );
+          api.onSesionExpirada = () {
+            ref.read(authProvider.notifier).sesionExpirada();
+          };
+          return api;
+        }),
+      ],
+      child: const ModeliaApp(),
+    ),
   );
 }
 

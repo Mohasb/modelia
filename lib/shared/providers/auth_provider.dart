@@ -1,6 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modelia/shared/providers/pedidos_provider.dart';
-import 'package:modelia/shared/providers/perfil_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/api_service.dart';
 import 'api_provider.dart';
@@ -14,6 +12,7 @@ class AuthState {
   final String? email;
   final int? id;
   final bool sesionExpirada;
+  final int version; // incrementa en cada login/logout
 
   const AuthState({
     this.isLogueado = false,
@@ -24,36 +23,36 @@ class AuthState {
     this.email,
     this.id,
     this.sesionExpirada = false,
+    this.version = 0,
   });
 
   AuthState copyWith({
     bool? isLogueado,
     bool? isAdmin,
     bool? isLoading,
-    Object? error = _sentinel, // valor centinela
+    String? error,
     String? nombre,
     String? email,
     int? id,
     bool? sesionExpirada,
+    int? version,
   }) => AuthState(
     isLogueado: isLogueado ?? this.isLogueado,
     isAdmin: isAdmin ?? this.isAdmin,
     isLoading: isLoading ?? this.isLoading,
-    error: error == _sentinel ? this.error : error as String?,
+    error: error,
     nombre: nombre ?? this.nombre,
     email: email ?? this.email,
     id: id ?? this.id,
     sesionExpirada: sesionExpirada ?? this.sesionExpirada,
+    version: version ?? this.version,
   );
-
-  static const Object _sentinel = Object();
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final ApiService _api;
-  final Ref _ref;
 
-  AuthNotifier(this._api, this._ref) : super(const AuthState()) {
+  AuthNotifier(this._api) : super(const AuthState()) {
     _cargarSesionGuardada();
   }
 
@@ -61,80 +60,76 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
     if (token != null) {
+      final id = prefs.getInt('usuario_id');
+      print('[AUTH] Sesión guardada encontrada - usuario_id: $id');
       state = AuthState(
         isLogueado: true,
         isAdmin: prefs.getString('usuario_rol') == 'ADMIN',
         nombre: prefs.getString('usuario_nombre'),
         email: prefs.getString('usuario_email'),
-        id: prefs.getInt('usuario_id'),
+        id: id,
+        version: 1,
       );
+    } else {
+      print('[AUTH] No hay sesión guardada');
     }
   }
 
   Future<void> login(String email, String password) async {
-    // Limpiar error previo explícitamente antes de intentar
-    state = AuthState(
-      isLoading: true,
-      nombre: state.nombre,
-      email: state.email,
-      id: state.id,
-    );
+    print('[AUTH] Intentando login con: $email');
+    state = AuthState(isLoading: true, version: state.version);
     try {
       final auth = await _api.login(email, password);
       await _api.guardarTokens(auth);
-      _ref.invalidate(perfilProvider);
-      _ref.invalidate(misPedidosProvider);
+      print('[AUTH] Login exitoso - usuario_id: ${auth.id}, rol: ${auth.rol}');
       state = AuthState(
         isLogueado: true,
         isAdmin: auth.esAdmin,
         nombre: auth.nombre,
         email: auth.email,
         id: auth.id,
+        version: state.version + 1, // fuerza recalculo de providers
       );
     } catch (e) {
-      // Mantener los campos del formulario, solo actualizar error
+      print('[AUTH] Login fallido: $e');
       state = AuthState(
         isLoading: false,
         error: e.toString().replaceAll('Exception: ', ''),
+        version: state.version,
       );
     }
   }
 
   Future<void> register(String nombre, String email, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    print('[AUTH] Registrando: $email');
+    state = AuthState(isLoading: true, version: state.version);
     try {
       await _api.register(nombre, email, password);
       await login(email, password);
     } catch (e) {
-      state = state.copyWith(
+      print('[AUTH] Register fallido: $e');
+      state = AuthState(
         isLoading: false,
         error: e.toString().replaceAll('Exception: ', ''),
+        version: state.version,
       );
     }
   }
 
   Future<void> logout() async {
+    print('[AUTH] Logout - limpiando sesión');
     await _api.logout();
-    // Invalidar caché de perfil al salir
-    _ref.invalidate(perfilProvider);
-    _ref.invalidate(misPedidosProvider);
-    state = const AuthState(sesionExpirada: false);
+    state = AuthState(version: state.version + 1); // fuerza recalculo
   }
 
-  // Llamado desde ApiService cuando el refresh token falla
   void sesionExpirada() {
+    print('[AUTH] Sesión expirada - redirigiendo a login');
     _api.borrarTokens();
-    _ref.invalidate(perfilProvider);
-    _ref.invalidate(misPedidosProvider);
-    state = const AuthState(sesionExpirada: true);
-  }
-
-  void clearError() {
-    state = state.copyWith(error: null, sesionExpirada: false);
+    state = AuthState(sesionExpirada: true, version: state.version + 1);
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final api = ref.watch(apiServiceProvider);
-  return AuthNotifier(api, ref);
+  return AuthNotifier(api);
 });

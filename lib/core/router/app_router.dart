@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modelia/features/detalle/screens/ar_viewer_screen.dart';
@@ -17,13 +18,44 @@ import 'package:modelia/features/admin/screens/admin_pedidos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_categorias_screen.dart';
 import 'package:modelia/features/admin/screens/admin_usuarios_screen.dart';
 
+// Listenable que solo notifica cuando cambian isLogueado o sesionExpirada
+// NO cuando cambia isLoading o error
+class _AuthRouterNotifier extends ChangeNotifier {
+  _AuthRouterNotifier(this._ref) {
+    _ref.listen<AuthState>(authProvider, (previous, next) {
+      final loginCambio = previous?.isLogueado != next.isLogueado;
+      final expiraCambio = previous?.sesionExpirada != next.sesionExpirada;
+      if (loginCambio || expiraCambio) {
+        print(
+          '[ROUTER] Notificando cambio - isLogueado: ${next.isLogueado}, sesionExpirada: ${next.sesionExpirada}',
+        );
+        notifyListeners();
+      }
+    });
+  }
+
+  final Ref _ref;
+
+  AuthState get authState => _ref.read(authProvider);
+}
+
+final _authRouterNotifierProvider = Provider((ref) {
+  return _AuthRouterNotifier(ref);
+});
+
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authProvider);
+  final notifier = ref.watch(_authRouterNotifierProvider);
 
   return GoRouter(
     initialLocation: '/',
+    refreshListenable: notifier,
     redirect: (context, state) {
+      final authState = notifier.authState;
       final location = state.uri.path;
+
+      print(
+        '[ROUTER] Redirect - location: $location, isLogueado: ${authState.isLogueado}, sesionExpirada: ${authState.sesionExpirada}',
+      );
 
       if (authState.sesionExpirada &&
           location != '/login' &&
@@ -46,7 +78,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      // ── Shell con nav ────────────────────────────────────
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -85,8 +116,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-
-      // ── Sin shell (pantalla completa) ────────────────────
       GoRoute(
         path: '/producto/:id',
         builder: (context, state) {

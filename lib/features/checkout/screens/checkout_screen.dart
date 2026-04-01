@@ -6,6 +6,7 @@ import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/shared/providers/api_provider.dart';
 import 'package:modelia/shared/models/carrito_item.dart';
 import 'package:modelia/core/theme/app_theme.dart';
+import 'package:modelia/shared/providers/pedidos_provider.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
@@ -20,7 +21,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> _confirmarPedido() async {
     setState(() => _procesando = true);
-
     try {
       final api = ref.read(apiServiceProvider);
       final carrito = ref.read(carritoProvider);
@@ -29,6 +29,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           .toList();
 
       await api.crearPedido(items);
+
+      // Invalidar caché de pedidos para que se recarguen
+      ref.invalidate(misPedidosProvider);
+
       ref.read(carritoProvider.notifier).vaciar();
       setState(() {
         _procesando = false;

@@ -35,66 +35,76 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
       return;
     }
-
+    // Sin setState — usamos el isLoading del provider directamente
     await ref
         .read(authProvider.notifier)
         .login(_emailController.text.trim(), _passwordController.text);
-
-    if (!mounted) return;
-
-    final authState = ref.read(authProvider);
-
-    if (authState.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authState.error!),
-          backgroundColor: AppTheme.accentRed,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
-      return;
-    }
-
-    if (authState.isLogueado) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('¡Bienvenido, ${authState.nombre}!'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-
-      await Future.delayed(const Duration(milliseconds: 500));
-      if (!mounted) return;
-
-      final redirect = widget.redirectTo;
-      if (redirect != null && redirect.isNotEmpty) {
-        context.go(redirect);
-      } else if (authState.isAdmin) {
-        context.go('/admin');
-      } else {
-        context.go('/');
-      }
-    }
+    // NO hacemos nada más aquí — ref.listen se encarga de la navegación y errores
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (!mounted) return;
+
+      // Mostrar error
+      if (next.error != null && next.error != previous?.error) {
+        print('[LOGIN_SCREEN] Mostrando error: ${next.error}');
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error!),
+            backgroundColor: AppTheme.accentRed,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+
+      // Navegar tras login exitoso
+      if (next.isLogueado && !(previous?.isLogueado ?? false)) {
+        print('[LOGIN_SCREEN] Login exitoso, navegando...');
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('¡Bienvenido, ${next.nombre}!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        Future.delayed(const Duration(milliseconds: 800), () {
+          if (!mounted) return;
+          final redirect = widget.redirectTo;
+          if (redirect != null && redirect.isNotEmpty) {
+            context.go(redirect);
+          } else if (next.isAdmin) {
+            context.go('/admin');
+          } else {
+            context.go('/');
+          }
+        });
+      }
+    });
+
     final authState = ref.watch(authProvider);
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_rounded, size: 20),
-          onPressed: () => {
-            if (context.canPop()) {context.pop()} else {context.go('/')},
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/');
+            }
           },
         ),
       ),
@@ -105,17 +115,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              // En el método build, antes del header
               if (authState.sesionExpirada)
                 Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.1),
+                    color: Colors.amber.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.amber.withValues(alpha: 0.3),
-                    ),
+                    border: Border.all(color: Colors.amber.withOpacity(0.3)),
                   ),
                   child: const Row(
                     children: [
@@ -134,7 +141,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
                 ),
-              // Header
               Text(
                 'Bienvenido',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -147,12 +153,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  ).colorScheme.onSurface.withOpacity(0.5),
                 ),
               ),
               const SizedBox(height: 40),
-
-              // Email
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -163,8 +167,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Password
               TextField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
@@ -185,11 +187,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-
               const SizedBox(height: 24),
-
-              // Botón login
               FilledButton(
                 onPressed: authState.isLoading ? null : _login,
                 child: authState.isLoading
@@ -204,8 +202,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     : const Text('Iniciar sesión'),
               ),
               const SizedBox(height: 16),
-
-              // Ir a registro
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
