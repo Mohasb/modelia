@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modelia/features/admin/screens/admin_tema_screen.dart';
 import 'package:modelia/features/detalle/screens/ar_viewer_screen.dart';
+import 'package:modelia/features/splash/splash_screen.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/core/router/app_shell.dart';
 import 'package:modelia/features/catalogo/screens/home_screen.dart';
@@ -18,6 +19,7 @@ import 'package:modelia/features/admin/screens/admin_productos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_pedidos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_categorias_screen.dart';
 import 'package:modelia/features/admin/screens/admin_usuarios_screen.dart';
+import 'package:modelia/tools/icon_capture_screen.dart';
 
 // Listenable que solo notifica cuando cambian isLogueado o sesionExpirada
 // NO cuando cambia isLoading o error
@@ -48,11 +50,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   final notifier = ref.watch(_authRouterNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     refreshListenable: notifier,
     redirect: (context, state) {
       final authState = notifier.authState;
       final location = state.uri.path;
+
+      if (location == '/splash') return null;
 
       print(
         '[ROUTER] Redirect - location: $location, isLogueado: ${authState.isLogueado}, sesionExpirada: ${authState.sesionExpirada}',
@@ -82,6 +86,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
+          GoRoute(
+            path: '/splash',
+            builder: (context, state) => const SplashScreen(),
+          ),
           GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
           GoRoute(
             path: '/catalogo',
@@ -120,6 +128,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const AdminTemaScreen(),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/icon-capture',
+        builder: (context, state) => const IconCaptureScreen(),
       ),
       GoRoute(
         path: '/producto/:id',

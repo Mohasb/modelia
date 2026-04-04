@@ -1,0 +1,18 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" rx="200" fill="#0A0A0A"/>
+  <circle cx="512" cy="512" r="450" fill="#0F0F1A"/>
+  <circle cx="512" cy="512" r="448" fill="none" stroke="#E94560" stroke-width="2" stroke-opacity="0.3"/>
+  <polygon points="512,240 692,420 512,480 332,420" fill="#E94560"/>
+  <polygon points="512,240 332,420 512,480" fill="rgba(255,255,255,0.12)"/>
+  <polygon points="512,240 692,420 512,480" fill="rgba(255,255,255,0.22)"/>
+  <polygon points="332,420 512,480 512,720" fill="#B01830"/>
+  <polygon points="692,420 512,480 512,720" fill="#C02840"/>
+  <line x1="332" y1="420" x2="692" y2="420" stroke="white" stroke-width="2" opacity="0.35"/>
+  <line x1="512" y1="222" x2="512" y2="196" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+  <line x1="488" y1="228" x2="472" y2="212" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <line x1="536" y1="228" x2="552" y2="212" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <circle cx="512" cy="240" r="5" fill="white" opacity="0.9"/>
+  <circle cx="648" cy="636" r="56" fill="#0A0A0A"/>
+  <circle cx="648" cy="636" r="50" fill="#E94560"/>
+  <text x="648" y="652" font-family="system-ui,sans-serif" font-size="32" font-weight="700" fill="white" text-anchor="middle">AR</text>
+</svg>

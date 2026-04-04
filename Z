@@ -1,14 +1,7 @@
-ARREGLAR LA NOTIFIACCION DE LA HOME                                                                                                                     ---> HECHO
-desde admin-usuario poder crear admins
-quitar baner de abajo del objeto 3d en android
-que dierencia hay entre catalogo y home? añadir en la home un spash screen? o aparte
-contacto?
-Modelia en el header hay que cambiar por textto centrado y logo? ademas de que lo modifica el admin AGUSTO
-Añadir icono de la app a la bar
+Vale lo que queda para acabar la app es: separar incio y catalogo por que ahora son iguales. no se muy bien que hacer con esto. 2  hacer que el cajon de novedades haga algo.
+  3 me gustaria usar Staggered Grid de alguna forma. Se puede hacer con el model viwer que si el objeto 3d tiene animanciones
+ que salga un desplegable con las animaciones? SE puede hacer con el model viwer si el objeto lo permite cambiar el color de los objetos? por ejemplo cambiar el color de unas zapatillas, ...
 
 
 
-
-
-
-flutter run 2>&1 | findstr /C:"[PEDIDOS]" /C:"[AUTH]" /C:"[API]" /C:"[PERFIL]"
+ ctrl + f :Perfecto, ahora está claro. Empezamos por el backend y luego Flutter.

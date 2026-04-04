@@ -108,7 +108,7 @@ class ProductoCard extends ConsumerWidget {
                                     margin: EdgeInsets.only(
                                       bottom:
                                           MediaQuery.of(context).size.height -
-                                          150,
+                                          185,
                                       left: 16,
                                       right: 16,
                                     ),

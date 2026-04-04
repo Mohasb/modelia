@@ -6,7 +6,6 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:modelia/shared/providers/productos_provider.dart';
 import 'package:modelia/core/theme/app_theme.dart';
 
-// Import condicional para webview_windows
 import 'package:modelia/features/detalle/screens/visor_windows.dart'
     if (dart.library.js) 'package:modelia/features/detalle/screens/visor_stub.dart';
 
@@ -63,6 +62,8 @@ class _VisorAndroid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // El ModelViewer ocupa toda la pantalla
+        // El botón AR nativo aparece automáticamente dentro del visor
         Expanded(
           child: ModelViewer(
             src: modelUrl,
@@ -74,35 +75,17 @@ class _VisorAndroid extends StatelessWidget {
             shadowIntensity: 1,
           ),
         ),
+        // Panel inferior solo con texto informativo
         Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
           color: Theme.of(context).colorScheme.surface,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Rota y explora el modelo en 3D',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withValues(alpha: 0.5),
-                ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.view_in_ar_rounded),
-                  label: const Text('Ver en AR'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.accentRed,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                  ),
-                ),
-              ),
-            ],
+          child: Text(
+            'Rota y explora el modelo en 3D · Pulsa el botón AR del visor',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+            ),
           ),
         ),
       ],
