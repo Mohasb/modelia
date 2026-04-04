@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:modelia/core/theme/app_theme.dart';
 import 'package:modelia/shared/models/producto.dart';
-import 'package:modelia/shared/models/categoria.dart';
 import 'package:modelia/shared/providers/api_provider.dart';
 import 'package:modelia/shared/providers/productos_provider.dart';
 
@@ -191,7 +190,7 @@ class _ProductoAdminCard extends StatelessWidget {
                 Text(
                   '${producto.precio.toStringAsFixed(2)} € · Stock: ${producto.stock}',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
                 Text(
@@ -213,7 +212,7 @@ class _ProductoAdminCard extends StatelessWidget {
             icon: Icon(
               Icons.delete_outline_rounded,
               size: 20,
-              color: colorScheme.onSurface.withOpacity(0.4),
+              color: colorScheme.onSurface.withValues(alpha: 0.4),
             ),
           ),
         ],
@@ -393,7 +392,7 @@ class _FormularioProductoState extends ConsumerState<_FormularioProducto> {
             // Categoría
             categoriasAsync.when(
               data: (categorias) => DropdownButtonFormField<int>(
-                value: _categoriaId,
+                initialValue: _categoriaId,
                 decoration: const InputDecoration(labelText: 'Categoría *'),
                 items: categorias
                     .map(

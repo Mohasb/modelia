@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:modelia/shared/providers/productos_provider.dart';
 import 'package:modelia/core/theme/app_theme.dart';
-import 'package:path_provider/path_provider.dart';
 
 // Import condicional para webview_windows
 import 'package:modelia/features/detalle/screens/visor_windows.dart'
@@ -88,7 +85,7 @@ class _VisorAndroid extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.5),
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
               const SizedBox(height: 10),

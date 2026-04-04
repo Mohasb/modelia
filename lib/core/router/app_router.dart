@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modelia/features/admin/screens/admin_tema_screen.dart';
 import 'package:modelia/features/detalle/screens/ar_viewer_screen.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/core/router/app_shell.dart';
@@ -113,6 +114,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/usuarios',
             builder: (context, state) => const AdminUsuariosScreen(),
+          ),
+          GoRoute(
+            path: '/admin/tema',
+            builder: (context, state) => const AdminTemaScreen(),
           ),
         ],
       ),

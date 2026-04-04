@@ -118,6 +118,14 @@ class AdminDashboardScreen extends ConsumerWidget {
                 color: AppTheme.accentRed,
                 onTap: () => context.go('/admin/usuarios'),
               ),
+              const SizedBox(height: 8),
+              _AccesoAdmin(
+                icon: Icons.palette_outlined,
+                label: 'Tema y colores',
+                descripcion: 'Personalizar colores de la app en tiempo real',
+                color: Colors.deepPurple,
+                onTap: () => context.go('/admin/tema'),
+              ),
             ],
           ),
         ),
@@ -166,7 +174,7 @@ class _StatCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.5),
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -208,7 +216,7 @@ class _AccesoAdmin extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: color, size: 22),
@@ -229,7 +237,7 @@ class _AccesoAdmin extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.5),
+                      ).colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ),
                 ],
@@ -238,7 +246,9 @@ class _AccesoAdmin extends StatelessWidget {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 14,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.3),
             ),
           ],
         ),

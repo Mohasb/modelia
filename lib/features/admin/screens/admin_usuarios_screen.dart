@@ -99,7 +99,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                 Text(
                   usuario.email,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurface.withOpacity(0.5),
+                    color: colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -112,7 +112,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                       ),
                       decoration: BoxDecoration(
                         color: esAdmin
-                            ? AppTheme.accentRed.withOpacity(0.1)
+                            ? AppTheme.accentRed.withValues(alpha: 0.1)
                             : colorScheme.surface,
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -123,7 +123,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                           color: esAdmin
                               ? AppTheme.accentRed
-                              : colorScheme.onSurface.withOpacity(0.5),
+                              : colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
@@ -135,8 +135,8 @@ class _UsuarioAdminCard extends ConsumerWidget {
                       ),
                       decoration: BoxDecoration(
                         color: usuario.activo
-                            ? Colors.green.withOpacity(0.1)
-                            : Colors.red.withOpacity(0.1),
+                            ? Colors.green.withValues(alpha: 0.1)
+                            : Colors.red.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(

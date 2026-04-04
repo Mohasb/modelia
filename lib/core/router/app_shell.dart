@@ -37,17 +37,20 @@ class AppShell extends ConsumerWidget {
     final totalItems = ref.watch(carritoTotalItemsProvider);
     final authState = ref.watch(authProvider);
     final isDark = ref.watch(themeProvider.notifier).isDark;
+    final temaConfig = ref.watch(themeProvider).temaConfig;
+    final appNombre = temaConfig.appNombre;
     final isWindows = Theme.of(context).platform == TargetPlatform.windows;
 
     if (isWindows) {
       return _WindowsShell(
+        appNombre: appNombre,
         selectedIndex: selectedIndex,
         totalItems: totalItems,
         isDark: isDark,
         authState: authState,
         onNavTap: (i) => _onNavTap(context, i),
         onCartTap: () => context.push('/carrito'),
-        onDarkToggle: () => ref.read(themeProvider.notifier).toggle(),
+        onDarkToggle: () => ref.read(themeProvider.notifier).toggleDarkMode(),
         onAvatarTap: () =>
             authState.isLogueado ? context.go('/perfil') : context.go('/login'),
         child: child,
@@ -55,13 +58,14 @@ class AppShell extends ConsumerWidget {
     }
 
     return _AndroidShell(
+      appNombre: appNombre,
       selectedIndex: selectedIndex,
       totalItems: totalItems,
       isDark: isDark,
       authState: authState,
       onNavTap: (i) => _onNavTap(context, i),
       onCartTap: () => context.push('/carrito'),
-      onDarkToggle: () => ref.read(themeProvider.notifier).toggle(),
+      onDarkToggle: () => ref.read(themeProvider.notifier).toggleDarkMode(),
       onAvatarTap: () =>
           authState.isLogueado ? context.go('/perfil') : context.go('/login'),
       child: child,
@@ -73,6 +77,7 @@ class AppShell extends ConsumerWidget {
 
 class _AndroidShell extends StatelessWidget {
   final Widget child;
+  final String appNombre;
   final int selectedIndex;
   final int totalItems;
   final bool isDark;
@@ -84,6 +89,7 @@ class _AndroidShell extends StatelessWidget {
 
   const _AndroidShell({
     required this.child,
+    required this.appNombre,
     required this.selectedIndex,
     required this.totalItems,
     required this.isDark,
@@ -98,6 +104,7 @@ class _AndroidShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _ModeliaAppBar(
+        appNombre: appNombre,
         isDark: isDark,
         totalItems: totalItems,
         authState: authState,
@@ -118,6 +125,7 @@ class _AndroidShell extends StatelessWidget {
 
 class _WindowsShell extends StatelessWidget {
   final Widget child;
+  final String appNombre;
   final int selectedIndex;
   final int totalItems;
   final bool isDark;
@@ -129,6 +137,7 @@ class _WindowsShell extends StatelessWidget {
 
   const _WindowsShell({
     required this.child,
+    required this.appNombre,
     required this.selectedIndex,
     required this.totalItems,
     required this.isDark,
@@ -143,6 +152,7 @@ class _WindowsShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _ModeliaAppBar(
+        appNombre: appNombre,
         isDark: isDark,
         totalItems: totalItems,
         authState: authState,
@@ -170,6 +180,7 @@ class _WindowsShell extends StatelessWidget {
 // ── AppBar compartida ──────────────────────────────────────
 
 class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String appNombre;
   final bool isDark;
   final int totalItems;
   final dynamic authState;
@@ -179,6 +190,7 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isWindows;
 
   const _ModeliaAppBar({
+    required this.appNombre,
     required this.isDark,
     required this.totalItems,
     required this.authState,
@@ -196,10 +208,8 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return AppBar(
-      title: const Text('Modelia'),
+      title: Text(appNombre),
       actions: [
-        // Toggle dark mode — solo en Android en el AppBar
-        // En Windows está en el rail
         if (!isWindows)
           IconButton(
             onPressed: onDarkToggle,
@@ -209,8 +219,6 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             tooltip: isDark ? 'Modo claro' : 'Modo oscuro',
           ),
-
-        // Carrito con badge
         Stack(
           children: [
             IconButton(
@@ -242,8 +250,6 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
           ],
         ),
-
-        // Avatar / login
         GestureDetector(
           onTap: onAvatarTap,
           child: Container(

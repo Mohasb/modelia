@@ -1,18 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:modelia/shared/providers/api_provider.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
+import 'package:modelia/shared/providers/api_provider.dart';
 import 'package:modelia/shared/models/pedido.dart';
 import 'package:modelia/core/theme/app_theme.dart';
 import 'package:modelia/core/utils/constants.dart';
-import 'package:modelia/shared/providers/pedidos_provider.dart';
 
-class MisPedidosScreen extends ConsumerWidget {
+class MisPedidosScreen extends ConsumerStatefulWidget {
   const MisPedidosScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MisPedidosScreen> createState() => _MisPedidosScreenState();
+}
+
+class _MisPedidosScreenState extends ConsumerState<MisPedidosScreen> {
+  List<Pedido> _pedidos = [];
+  bool _cargando = true;
+  String? _error;
+  int? _usuarioIdCargado; // ID del usuario cuyos pedidos están en memoria
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPedidos();
+  }
+
+  Future<void> _cargarPedidos() async {
+    final authState = ref.read(authProvider);
+    if (!authState.isLogueado || authState.id == null) return;
+
+    print('[PEDIDOS_SCREEN] Cargando pedidos para usuario_id: ${authState.id}');
+    setState(() {
+      _cargando = true;
+      _error = null;
+    });
+
+    try {
+      final api = ref.read(apiServiceProvider);
+      final pedidos = await api.getMisPedidos();
+      print(
+        '[PEDIDOS_SCREEN] Cargados ${pedidos.length} pedidos para usuario_id: ${authState.id}',
+      );
+      if (mounted) {
+        setState(() {
+          _pedidos = pedidos;
+          _usuarioIdCargado = authState.id;
+          _cargando = false;
+        });
+      }
+    } catch (e) {
+      print('[PEDIDOS_SCREEN] Error: $e');
+      if (mounted) {
+        setState(() {
+          _error = e.toString().replaceAll('Exception: ', '');
+          _cargando = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Si el usuario cambió desde la última carga, recargar
+    final authState = ref.read(authProvider);
+    if (authState.id != _usuarioIdCargado && authState.isLogueado) {
+      print(
+        '[PEDIDOS_SCREEN] Usuario cambió de $_usuarioIdCargado a ${authState.id}, recargando...',
+      );
+      _cargarPedidos();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
 
     if (!authState.isLogueado) {
@@ -41,48 +103,46 @@ class MisPedidosScreen extends ConsumerWidget {
       );
     }
 
-    final pedidosAsync = ref.watch(misPedidosProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mis pedidos'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded, size: 22),
-            onPressed: () => ref.invalidate(misPedidosProvider),
+            onPressed: _cargarPedidos,
           ),
         ],
       ),
-      body: pedidosAsync.when(
-        data: (pedidos) => pedidos.isEmpty
-            ? _SinPedidos()
-            : ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: pedidos.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) =>
-                    _PedidoCard(pedido: pedidos[index]),
+      body: _cargando
+          ? const Center(
+              child: CircularProgressIndicator(color: AppTheme.accentRed),
+            )
+          : _error != null
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.wifi_off_rounded, size: 48),
+                  const SizedBox(height: 16),
+                  Text(_error!),
+                  const SizedBox(height: 16),
+                  FilledButton.icon(
+                    onPressed: _cargarPedidos,
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: const Text('Reintentar'),
+                  ),
+                ],
               ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
-        ),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.wifi_off_rounded, size: 48),
-              const SizedBox(height: 16),
-              Text(e.toString().replaceAll('Exception: ', '')),
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                onPressed: () => ref.invalidate(misPedidosProvider),
-                icon: const Icon(Icons.refresh_rounded),
-                label: const Text('Reintentar'),
-              ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : _pedidos.isEmpty
+          ? _SinPedidos()
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: _pedidos.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) =>
+                  _PedidoCard(pedido: _pedidos[index]),
+            ),
     );
   }
 }
@@ -107,7 +167,6 @@ class _PedidoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cabecera
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -138,8 +197,6 @@ class _PedidoCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-
-          // Fecha
           Text(
             _formatearFecha(pedido.createdAt),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -147,8 +204,6 @@ class _PedidoCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-
-          // Items
           ...pedido.items.map(
             (item) => Padding(
               padding: const EdgeInsets.only(bottom: 4),
@@ -172,10 +227,7 @@ class _PedidoCard extends StatelessWidget {
               ),
             ),
           ),
-
           const Divider(height: 20),
-
-          // Total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

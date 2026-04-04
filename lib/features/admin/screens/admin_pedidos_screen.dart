@@ -85,7 +85,7 @@ class _PedidoAdminCard extends ConsumerWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: colorEstado.withOpacity(0.1),
+                  color: colorEstado.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -103,7 +103,7 @@ class _PedidoAdminCard extends ConsumerWidget {
           Text(
             '${pedido.total.toStringAsFixed(2)} € · ${pedido.items.length} producto(s)',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.5),
+              color: colorScheme.onSurface.withValues(alpha: 0.5),
             ),
           ),
           const SizedBox(height: 10),
@@ -161,7 +161,9 @@ class _PedidoAdminCard extends ConsumerWidget {
                                 border: Border.all(
                                   color: pedido.estado == estado
                                       ? colorEstado
-                                      : colorScheme.onSurface.withOpacity(0.15),
+                                      : colorScheme.onSurface.withValues(
+                                          alpha: 0.15,
+                                        ),
                                 ),
                               ),
                               child: Text(
@@ -171,7 +173,9 @@ class _PedidoAdminCard extends ConsumerWidget {
                                   fontWeight: FontWeight.w500,
                                   color: pedido.estado == estado
                                       ? Colors.white
-                                      : colorScheme.onSurface.withOpacity(0.6),
+                                      : colorScheme.onSurface.withValues(
+                                          alpha: 0.6,
+                                        ),
                                 ),
                               ),
                             ),

@@ -36,14 +36,14 @@ class ModeliaApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(themeProvider);
+    final themeState = ref.watch(themeProvider);
 
     return MaterialApp.router(
       title: 'Modelia',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode: themeMode,
+      theme: AppTheme.light(themeState.temaConfig),
+      darkTheme: AppTheme.dark(themeState.temaConfig),
+      themeMode: themeState.themeMode,
       routerConfig: router,
     );
   }

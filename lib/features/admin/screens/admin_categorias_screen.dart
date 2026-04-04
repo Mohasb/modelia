@@ -57,7 +57,7 @@ class AdminCategoriasScreen extends ConsumerWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: AppTheme.accentRed.withOpacity(0.1),
+                            color: AppTheme.accentRed.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
@@ -84,7 +84,7 @@ class AdminCategoriasScreen extends ConsumerWidget {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface
-                                            .withOpacity(0.5),
+                                            .withValues(alpha: 0.5),
                                       ),
                                 ),
                             ],

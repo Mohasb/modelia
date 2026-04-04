@@ -162,13 +162,11 @@ class ApiService {
     _cerrando = true;
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refresh_token') ?? '';
-    await http
-        .post(
-          Uri.parse('$baseUrl/api/auth/logout'),
-          headers: _headersPublic,
-          body: jsonEncode({'refreshToken': refreshToken}),
-        )
-        .catchError((_) {});
+    await http.post(
+      Uri.parse('$baseUrl/api/auth/logout'),
+      headers: _headersPublic,
+      body: jsonEncode({'refreshToken': refreshToken}),
+    );
     await borrarTokens();
     _cerrando = false;
     print('[API] Logout completado');
