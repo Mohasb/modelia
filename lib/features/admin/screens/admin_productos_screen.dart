@@ -53,6 +53,8 @@ class AdminProductosScreen extends ConsumerWidget {
                       _mostrarFormulario(context, ref, productos[index]),
                   onEliminar: () =>
                       _confirmarEliminar(context, ref, productos[index]),
+                  onToggleDestacado: () =>
+                      _toggleDestacado(context, ref, productos[index]),
                 ),
               ),
         loading: () => const Center(
@@ -61,6 +63,45 @@ class AdminProductosScreen extends ConsumerWidget {
         error: (e, _) => Center(child: Text(e.toString())),
       ),
     );
+  }
+
+  Future<void> _toggleDestacado(
+    BuildContext context,
+    WidgetRef ref,
+    Producto producto,
+  ) async {
+    try {
+      await ref.read(apiServiceProvider).toggleDestacado(producto.id);
+      ref.invalidate(_productosAdminProvider);
+      ref.invalidate(destacadosProvider);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              producto.destacado
+                  ? '${producto.nombre} ya no es destacado'
+                  : '${producto.nombre} marcado como destacado',
+            ),
+            backgroundColor: producto.destacado
+                ? Colors.grey
+                : Colors.amber[700],
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: AppTheme.accentRed,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _mostrarFormulario(
@@ -113,6 +154,7 @@ class AdminProductosScreen extends ConsumerWidget {
         await ref.read(apiServiceProvider).borrarProducto(producto.id);
         ref.invalidate(_productosAdminProvider);
         ref.invalidate(productosProvider);
+        ref.invalidate(destacadosProvider);
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -127,15 +169,19 @@ class AdminProductosScreen extends ConsumerWidget {
   }
 }
 
+// ── Card de producto con botón destacado ──────────────────
+
 class _ProductoAdminCard extends StatelessWidget {
   final Producto producto;
   final VoidCallback onEditar;
   final VoidCallback onEliminar;
+  final VoidCallback onToggleDestacado;
 
   const _ProductoAdminCard({
     required this.producto,
     required this.onEditar,
     required this.onEliminar,
+    required this.onToggleDestacado,
   });
 
   @override
@@ -147,9 +193,13 @@ class _ProductoAdminCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
+        border: producto.destacado
+            ? Border.all(color: Colors.amber.withValues(alpha: 0.5), width: 1.5)
+            : null,
       ),
       child: Row(
         children: [
+          // Imagen
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: SizedBox(
@@ -174,17 +224,34 @@ class _ProductoAdminCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
+
+          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  producto.nombre,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  children: [
+                    if (producto.destacado)
+                      const Padding(
+                        padding: EdgeInsets.only(right: 4),
+                        child: Icon(
+                          Icons.star_rounded,
+                          size: 14,
+                          color: Colors.amber,
+                        ),
+                      ),
+                    Expanded(
+                      child: Text(
+                        producto.nombre,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -203,10 +270,31 @@ class _ProductoAdminCard extends StatelessWidget {
               ],
             ),
           ),
+
+          // Botón destacado
+          IconButton(
+            onPressed: onToggleDestacado,
+            tooltip: producto.destacado
+                ? 'Quitar destacado'
+                : 'Marcar como destacado',
+            icon: Icon(
+              producto.destacado
+                  ? Icons.star_rounded
+                  : Icons.star_outline_rounded,
+              size: 22,
+              color: producto.destacado
+                  ? Colors.amber
+                  : colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+
+          // Botón editar
           IconButton(
             onPressed: onEditar,
             icon: const Icon(Icons.edit_outlined, size: 20),
           ),
+
+          // Botón eliminar
           IconButton(
             onPressed: onEliminar,
             icon: Icon(
@@ -220,6 +308,8 @@ class _ProductoAdminCard extends StatelessWidget {
     );
   }
 }
+
+// ── Formulario producto ────────────────────────────────────
 
 class _FormularioProducto extends ConsumerStatefulWidget {
   final Producto? producto;
@@ -388,8 +478,6 @@ class _FormularioProductoState extends ConsumerState<_FormularioProducto> {
               ],
             ),
             const SizedBox(height: 12),
-
-            // Categoría
             categoriasAsync.when(
               data: (categorias) => DropdownButtonFormField<int>(
                 initialValue: _categoriaId,
@@ -406,7 +494,6 @@ class _FormularioProductoState extends ConsumerState<_FormularioProducto> {
               error: (_, __) => const Text('Error al cargar categorías'),
             ),
             const SizedBox(height: 12),
-
             TextField(
               controller: _imagenUrl,
               decoration: const InputDecoration(

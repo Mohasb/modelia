@@ -236,7 +236,7 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
                 top: BorderSide(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.08),
+                  ).colorScheme.onSurface.withValues(alpha: 0.08),
                   width: 0.5,
                 ),
               ),
@@ -340,7 +340,9 @@ class _ColorTile extends ConsumerWidget {
             color: color,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.15),
             ),
           ),
         ),
@@ -354,14 +356,14 @@ class _ColorTile extends ConsumerWidget {
       subtitle: Text(
         descripcion,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
         ),
       ),
       trailing: Text(
         '#${color.value.toRadixString(16).substring(2).toUpperCase()}',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           fontFamily: 'monospace',
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
         ),
       ),
       onTap: () => _abrirPicker(context, ref),

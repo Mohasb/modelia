@@ -53,7 +53,9 @@ class _PreviewTemaState extends State<PreviewTema>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.15),
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withValues(alpha: 0.15),
         ),
       ),
       clipBehavior: Clip.antiAlias,
@@ -190,7 +192,7 @@ class _PreviewTemaState extends State<PreviewTema>
                     label: 'Inicio',
                     color: _tabController.index == 0
                         ? c.accentColor
-                        : text.withOpacity(0.4),
+                        : text.withValues(alpha: 0.4),
                     onTap: () => setState(() => _tabController.index = 0),
                   ),
                   _NavItem(
@@ -198,7 +200,7 @@ class _PreviewTemaState extends State<PreviewTema>
                     label: 'Detalle',
                     color: _tabController.index == 1
                         ? c.accentColor
-                        : text.withOpacity(0.4),
+                        : text.withValues(alpha: 0.4),
                     onTap: () => setState(() => _tabController.index = 1),
                   ),
                   _NavItem(
@@ -206,7 +208,7 @@ class _PreviewTemaState extends State<PreviewTema>
                     label: 'Carrito',
                     color: _tabController.index == 2
                         ? c.accentColor
-                        : text.withOpacity(0.4),
+                        : text.withValues(alpha: 0.4),
                     onTap: () => setState(() => _tabController.index = 2),
                   ),
                   _NavItem(
@@ -214,7 +216,7 @@ class _PreviewTemaState extends State<PreviewTema>
                     label: 'Perfil',
                     color: _tabController.index == 3
                         ? c.accentColor
-                        : text.withOpacity(0.4),
+                        : text.withValues(alpha: 0.4),
                     onTap: () => setState(() => _tabController.index = 3),
                   ),
                 ],
@@ -312,13 +314,16 @@ class _TabHome extends StatelessWidget {
                 const SizedBox(width: 8),
                 Icon(
                   Icons.search_rounded,
-                  color: text.withOpacity(0.4),
+                  color: text.withValues(alpha: 0.4),
                   size: 12,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'Buscar...',
-                  style: TextStyle(color: text.withOpacity(0.4), fontSize: 10),
+                  style: TextStyle(
+                    color: text.withValues(alpha: 0.4),
+                    fontSize: 10,
+                  ),
                 ),
               ],
             ),
@@ -430,7 +435,7 @@ class _TabDetalle extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.inventory_2_outlined,
-                  color: text.withOpacity(0.3),
+                  color: text.withValues(alpha: 0.3),
                   size: 28,
                 ),
               ),
@@ -476,7 +481,7 @@ class _TabDetalle extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
+                          color: Colors.green.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: const Text(
@@ -492,7 +497,9 @@ class _TabDetalle extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: surface,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: c.accentColor.withOpacity(0.3)),
+                      border: Border.all(
+                        color: c.accentColor.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -500,7 +507,7 @@ class _TabDetalle extends StatelessWidget {
                           width: 20,
                           height: 20,
                           decoration: BoxDecoration(
-                            color: c.accentColor.withOpacity(0.1),
+                            color: c.accentColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -696,7 +703,7 @@ class _TabPerfil extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
               decoration: BoxDecoration(
-                color: c.accentColor.withOpacity(0.1),
+                color: c.accentColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -813,13 +820,13 @@ class _ProductoCard extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: text.withOpacity(0.06),
+                color: text.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Center(
                 child: Icon(
                   Icons.inventory_2_outlined,
-                  color: text.withOpacity(0.2),
+                  color: text.withValues(alpha: 0.2),
                   size: 18,
                 ),
               ),
@@ -879,7 +886,7 @@ class _ItemCarrito extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: text.withOpacity(0.06),
+              color: text.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(6),
             ),
           ),
@@ -909,7 +916,7 @@ class _ItemCarrito extends StatelessWidget {
           ),
           Text(
             'x$cantidad',
-            style: TextStyle(color: text.withOpacity(0.5), fontSize: 9),
+            style: TextStyle(color: text.withValues(alpha: 0.5), fontSize: 9),
           ),
         ],
       ),
@@ -932,7 +939,7 @@ class _PerfilCampo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 12, color: text.withOpacity(0.4)),
+        Icon(icon, size: 12, color: text.withValues(alpha: 0.4)),
         const SizedBox(width: 6),
         Text(label, style: TextStyle(color: text, fontSize: 9)),
       ],
@@ -977,7 +984,7 @@ class _AccesoRapidoMini extends StatelessWidget {
           Icon(
             Icons.arrow_forward_ios_rounded,
             size: 9,
-            color: text.withOpacity(0.3),
+            color: text.withValues(alpha: 0.3),
           ),
         ],
       ),

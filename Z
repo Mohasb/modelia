@@ -1,7 +1,4 @@
-Vale lo que queda para acabar la app es: separar incio y catalogo por que ahora son iguales. no se muy bien que hacer con esto. 2  hacer que el cajon de novedades haga algo.
-  3 me gustaria usar Staggered Grid de alguna forma. Se puede hacer con el model viwer que si el objeto 3d tiene animanciones
- que salga un desplegable con las animaciones? SE puede hacer con el model viwer si el objeto lo permite cambiar el color de los objetos? por ejemplo cambiar el color de unas zapatillas, ...
 
 
 
- ctrl + f :Perfecto, ahora está claro. Empezamos por el backend y luego Flutter.
+

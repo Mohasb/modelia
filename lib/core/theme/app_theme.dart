@@ -58,7 +58,7 @@ class AppTheme {
           color: Color(0xFF6E6E73),
           fontSize: 11,
         ),
-        indicatorColor: c.accentColor.withOpacity(0.1),
+        indicatorColor: c.accentColor.withValues(alpha: 0.1),
       ),
       cardTheme: CardThemeData(
         color: c.lightCard,
@@ -194,7 +194,7 @@ class AppTheme {
           color: Color(0xFF8E8E93),
           fontSize: 11,
         ),
-        indicatorColor: c.accentColor.withOpacity(0.1),
+        indicatorColor: c.accentColor.withValues(alpha: 0.1),
       ),
       cardTheme: CardThemeData(
         color: c.darkCard,

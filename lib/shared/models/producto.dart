@@ -9,6 +9,7 @@ class Producto {
   final bool tieneAr;
   final int categoriaId;
   final String categoriaNombre;
+  final bool destacado;
 
   const Producto({
     required this.id,
@@ -21,6 +22,7 @@ class Producto {
     required this.tieneAr,
     required this.categoriaId,
     required this.categoriaNombre,
+    this.destacado = false,
   });
 
   factory Producto.fromJson(Map<String, dynamic> json) => Producto(
@@ -34,6 +36,7 @@ class Producto {
     tieneAr: json['tieneAr'] ?? false,
     categoriaId: json['categoriaId'],
     categoriaNombre: json['categoriaNombre'] ?? '',
+    destacado: json['destacado'] ?? false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -47,5 +50,6 @@ class Producto {
     'tieneAr': tieneAr,
     'categoriaId': categoriaId,
     'categoriaNombre': categoriaNombre,
+    'destacado': destacado,
   };
 }

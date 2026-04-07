@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modelia/features/admin/screens/admin_tema_screen.dart';
+import 'package:modelia/features/catalogo/screens/catalogo_screen.dart';
 import 'package:modelia/features/detalle/screens/ar_viewer_screen.dart';
 import 'package:modelia/features/splash/splash_screen.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
@@ -93,7 +94,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
           GoRoute(
             path: '/catalogo',
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) => const CatalogoScreen(),
           ),
           GoRoute(
             path: '/mis-pedidos',

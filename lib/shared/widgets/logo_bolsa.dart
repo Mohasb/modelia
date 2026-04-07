@@ -55,8 +55,8 @@ class _BolsaPainter extends CustomPainter {
         Offset(cx, cy),
         r * 0.98,
         Paint()
-          ..color = LogoConfig.anilloExterior.withOpacity(
-            LogoConfig.anilloExteriorOpacity,
+          ..color = LogoConfig.anilloExterior.withValues(
+            alpha: LogoConfig.anilloExteriorOpacity,
           )
           ..style = PaintingStyle.stroke
           ..strokeWidth = 3.5,
@@ -103,7 +103,7 @@ class _BolsaPainter extends CustomPainter {
     canvas.drawPath(
       asaPath,
       Paint()
-        ..color = LogoConfig.bolsaCuerpo.withOpacity(0.9 * progreso)
+        ..color = LogoConfig.bolsaCuerpo.withValues(alpha: 0.9 * progreso)
         ..style = PaintingStyle.stroke
         ..strokeWidth = r * 0.12 + 7
         ..strokeCap = StrokeCap.round,
@@ -114,7 +114,7 @@ class _BolsaPainter extends CustomPainter {
       asaPath,
       Paint()
         ..color = (isDark ? LogoConfig.bolsaAsaDark : LogoConfig.bolsaAsa)
-            .withOpacity(progreso)
+            .withValues(alpha: progreso)
         ..style = PaintingStyle.stroke
         ..strokeWidth = r * 0.12
         ..strokeCap = StrokeCap.round,
@@ -126,7 +126,7 @@ class _BolsaPainter extends CustomPainter {
         Rect.fromLTWH(cuerpoX, cuerpoY, cuerpoW, cuerpoH),
         Radius.circular(radio),
       ),
-      Paint()..color = LogoConfig.bolsaCuerpo.withOpacity(progreso),
+      Paint()..color = LogoConfig.bolsaCuerpo.withValues(alpha: progreso),
     );
 
     // ── Cuerpo ───────────────────────────────────────────
@@ -135,7 +135,7 @@ class _BolsaPainter extends CustomPainter {
         Rect.fromLTWH(cuerpoX, cuerpoY, cuerpoW, cuerpoH),
         Radius.circular(radio),
       ),
-      Paint()..color = LogoConfig.bolsaCuerpo.withOpacity(progreso),
+      Paint()..color = LogoConfig.bolsaCuerpo.withValues(alpha: progreso),
     );
 
     // ── Brillo lateral izquierdo ─────────────────────────
@@ -150,8 +150,8 @@ class _BolsaPainter extends CustomPainter {
         Radius.circular(radio * 0.8),
       ),
       Paint()
-        ..color = Colors.white.withOpacity(
-          LogoConfig.bolsaBrilloOpacity * progreso,
+        ..color = Colors.white.withValues(
+          alpha: LogoConfig.bolsaBrilloOpacity * progreso,
         ),
     );
 
@@ -169,7 +169,8 @@ class _BolsaPainter extends CustomPainter {
           bottomRight: Radius.circular(radio),
         ),
       ),
-      Paint()..color = const Color(0xFF000000).withOpacity(0.18 * progreso),
+      Paint()
+        ..color = const Color(0xFF000000).withValues(alpha: 0.18 * progreso),
     );
 
     // ── Punto central — centrado en el cuerpo ─────────────
@@ -177,14 +178,15 @@ class _BolsaPainter extends CustomPainter {
     canvas.drawCircle(
       Offset(cx, puntoCY),
       r * 0.12,
-      Paint()..color = const Color(0xFF000000).withOpacity(0.2 * progreso),
+      Paint()
+        ..color = const Color(0xFF000000).withValues(alpha: 0.2 * progreso),
     );
     canvas.drawCircle(
       Offset(cx, puntoCY),
       r * 0.06,
       Paint()
-        ..color = Colors.white.withOpacity(
-          LogoConfig.bolsaPuntoOpacity * progreso,
+        ..color = Colors.white.withValues(
+          alpha: LogoConfig.bolsaPuntoOpacity * progreso,
         ),
     );
   }

@@ -148,7 +148,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           height: 220,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: LogoConfig.bolsaCuerpo.withOpacity(0.2),
+                            color: LogoConfig.bolsaCuerpo.withValues(
+                              alpha: 0.2,
+                            ),
                           ),
                         ),
                       ),
@@ -159,7 +161,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           height: 160,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: LogoConfig.bolsaCuerpo.withOpacity(0.12),
+                            color: LogoConfig.bolsaCuerpo.withValues(
+                              alpha: 0.12,
+                            ),
                           ),
                         ),
                       ),
@@ -183,7 +187,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           height: 28,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.7),
+                            color: Colors.white.withValues(alpha: 0.7),
                           ),
                         ),
                       ),
@@ -279,8 +283,8 @@ class _BolsaSplashPainter extends CustomPainter {
         Offset(cx, cy),
         r * 0.98,
         Paint()
-          ..color = LogoConfig.anilloExterior.withOpacity(
-            LogoConfig.anilloExteriorOpacity * f[0],
+          ..color = LogoConfig.anilloExterior.withValues(
+            alpha: LogoConfig.anilloExteriorOpacity * f[0],
           )
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5,
@@ -311,7 +315,7 @@ class _BolsaSplashPainter extends CustomPainter {
       canvas.drawPath(
         asaPath,
         Paint()
-          ..color = LogoConfig.bolsaAsa.withOpacity(f[1])
+          ..color = LogoConfig.bolsaAsa.withValues(alpha: f[1])
           ..style = PaintingStyle.stroke
           ..strokeWidth = r * 0.11
           ..strokeCap = StrokeCap.round,
@@ -325,7 +329,7 @@ class _BolsaSplashPainter extends CustomPainter {
           Rect.fromLTWH(cuerpoX, cuerpoY, cuerpoW, cuerpoH),
           Radius.circular(radio),
         ),
-        Paint()..color = LogoConfig.bolsaCuerpo.withOpacity(f[2]),
+        Paint()..color = LogoConfig.bolsaCuerpo.withValues(alpha: f[2]),
       );
     }
 
@@ -342,8 +346,8 @@ class _BolsaSplashPainter extends CustomPainter {
           Radius.circular(radio * 0.8),
         ),
         Paint()
-          ..color = LogoConfig.bolsaBrillo.withOpacity(
-            LogoConfig.bolsaBrilloOpacity * f[3],
+          ..color = LogoConfig.bolsaBrillo.withValues(
+            alpha: LogoConfig.bolsaBrilloOpacity * f[3],
           ),
       );
     }
@@ -365,7 +369,7 @@ class _BolsaSplashPainter extends CustomPainter {
         );
       canvas.drawPath(
         franjaPath,
-        Paint()..color = const Color(0xFF000000).withOpacity(0.18 * f[4]),
+        Paint()..color = const Color(0xFF000000).withValues(alpha: 0.18 * f[4]),
       );
     }
 
@@ -375,14 +379,14 @@ class _BolsaSplashPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(cx, puntoY),
         r * 0.13,
-        Paint()..color = const Color(0xFF000000).withOpacity(0.18 * f[5]),
+        Paint()..color = const Color(0xFF000000).withValues(alpha: 0.18 * f[5]),
       );
       canvas.drawCircle(
         Offset(cx, puntoY),
         r * 0.065,
         Paint()
-          ..color = LogoConfig.bolsaPunto.withOpacity(
-            LogoConfig.bolsaPuntoOpacity * f[5],
+          ..color = LogoConfig.bolsaPunto.withValues(
+            alpha: LogoConfig.bolsaPuntoOpacity * f[5],
           ),
       );
     }
@@ -393,7 +397,7 @@ class _BolsaSplashPainter extends CustomPainter {
         Offset(cx, cy),
         r * 0.5,
         Paint()
-          ..color = LogoConfig.bolsaCuerpo.withOpacity(0.06 * glowValue)
+          ..color = LogoConfig.bolsaCuerpo.withValues(alpha: 0.06 * glowValue)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 20),
       );
     }

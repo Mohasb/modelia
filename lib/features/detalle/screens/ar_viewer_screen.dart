@@ -84,7 +84,9 @@ class _VisorAndroid extends StatelessWidget {
             'Rota y explora el modelo en 3D · Pulsa el botón AR del visor',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.4),
             ),
           ),
         ),

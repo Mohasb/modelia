@@ -248,6 +248,28 @@ class ApiService {
     return data.map((j) => Pedido.fromJson(j)).toList();
   }
 
+  Future<List<Producto>> getDestacados() async {
+    print('[API] GET /api/productos/destacados');
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/productos/destacados'),
+      headers: _headersPublic,
+    );
+    _checkResponse(response);
+    final List<dynamic> data = jsonDecode(response.body);
+    return data.map((j) => Producto.fromJson(j)).toList();
+  }
+
+  Future<void> toggleDestacado(int id) async {
+    print('[API] PUT /api/admin/productos/$id/destacado');
+    final response = await _ejecutar(
+      (headers) => http.put(
+        Uri.parse('$baseUrl/api/admin/productos/$id/destacado'),
+        headers: headers,
+      ),
+    );
+    _checkResponse(response);
+  }
+
   // ── Perfil ────────────────────────────────────────────────
 
   Future<Usuario> getPerfil() async {
