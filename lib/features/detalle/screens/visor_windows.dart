@@ -81,7 +81,7 @@ class _VisorWindowsState extends State<VisorWindows> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: AppTheme.accentRed),
+            CircularProgressIndicator(color: AppTheme.accentGold),
             SizedBox(height: 16),
             Text('Cargando modelo...', style: TextStyle(color: Colors.white54)),
           ],

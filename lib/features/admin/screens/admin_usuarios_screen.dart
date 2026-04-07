@@ -39,7 +39,7 @@ class AdminUsuariosScreen extends ConsumerWidget {
               _UsuarioAdminCard(usuario: usuarios[index]),
         ),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(child: Text(e.toString())),
       ),
@@ -69,7 +69,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: esAdmin ? AppTheme.accentRed : colorScheme.surface,
+              color: esAdmin ? AppTheme.accentGold : colorScheme.surface,
               shape: BoxShape.circle,
             ),
             child: Center(
@@ -112,7 +112,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                       ),
                       decoration: BoxDecoration(
                         color: esAdmin
-                            ? AppTheme.accentRed.withValues(alpha: 0.1)
+                            ? AppTheme.accentGold.withValues(alpha: 0.1)
                             : colorScheme.surface,
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -122,7 +122,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: esAdmin
-                              ? AppTheme.accentRed
+                              ? AppTheme.accentGold
                               : colorScheme.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
@@ -173,7 +173,7 @@ class _UsuarioAdminCard extends ConsumerWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(e.toString().replaceAll('Exception: ', '')),
-                      backgroundColor: AppTheme.accentRed,
+                      backgroundColor: AppTheme.accentGold,
                     ),
                   );
                 }

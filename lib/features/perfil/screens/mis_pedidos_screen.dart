@@ -115,7 +115,7 @@ class _MisPedidosScreenState extends ConsumerState<MisPedidosScreen> {
       ),
       body: _cargando
           ? const Center(
-              child: CircularProgressIndicator(color: AppTheme.accentRed),
+              child: CircularProgressIndicator(color: AppTheme.accentGold),
             )
           : _error != null
           ? Center(
@@ -241,7 +241,7 @@ class _PedidoCard extends StatelessWidget {
                 '${pedido.total.toStringAsFixed(2)} €',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.accentRed,
+                  color: AppTheme.accentGold,
                 ),
               ),
             ],

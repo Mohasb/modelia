@@ -27,7 +27,7 @@ class BannerDestacado extends StatelessWidget {
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: AppTheme.accentRed.withValues(alpha: 0.3),
+                color: AppTheme.accentGold.withValues(alpha: 0.3),
                 shape: BoxShape.circle,
               ),
             ),
@@ -39,7 +39,7 @@ class BannerDestacado extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppTheme.accentRed.withValues(alpha: 0.15),
+                color: AppTheme.accentGold.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -57,7 +57,7 @@ class BannerDestacado extends StatelessWidget {
                     vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: const Text(

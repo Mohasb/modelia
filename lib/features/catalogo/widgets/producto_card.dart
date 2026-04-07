@@ -41,7 +41,7 @@ class ProductoCard extends ConsumerWidget {
                           child: const Center(
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: AppTheme.accentRed,
+                              color: AppTheme.accentGold,
                             ),
                           ),
                         ),
@@ -84,7 +84,7 @@ class ProductoCard extends ConsumerWidget {
                     Text(
                       '${producto.precio.toStringAsFixed(2)} €',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -103,7 +103,7 @@ class ProductoCard extends ConsumerWidget {
                                   SnackBar(
                                     content: Text('${producto.nombre} añadido'),
                                     duration: const Duration(seconds: 2),
-                                    backgroundColor: AppTheme.accentRed,
+                                    backgroundColor: AppTheme.accentGold,
                                     behavior: SnackBarBehavior.floating,
                                     margin: EdgeInsets.only(
                                       bottom:

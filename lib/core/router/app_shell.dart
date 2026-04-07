@@ -5,7 +5,6 @@ import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/shared/providers/carrito_provider.dart';
 import 'package:modelia/shared/providers/theme_provider.dart';
 import 'package:modelia/core/theme/app_theme.dart';
-import 'package:modelia/shared/widgets/logo_bolsa.dart';
 
 class AppShell extends ConsumerWidget {
   final Widget child;
@@ -212,7 +211,12 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LogoBolsa(size: 28, isDark: isDark, mostrarFondo: true),
+          Image.asset(
+            'assets/icons/icon.png',
+            width: 32,
+            height: 32,
+            fit: BoxFit.contain,
+          ),
           const SizedBox(width: 8),
           Text(
             appNombre,
@@ -249,7 +253,7 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
                   width: 16,
                   height: 16,
                   decoration: const BoxDecoration(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -274,7 +278,7 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
             height: 32,
             decoration: BoxDecoration(
               color: authState.isLogueado
-                  ? AppTheme.accentRed
+                  ? Theme.of(context).colorScheme.primary
                   : colorScheme.surfaceContainerHighest,
               shape: BoxShape.circle,
             ),

@@ -24,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
             ? const _SinDestacados()
             : _VistaDestacados(productos: destacados),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(
           child: Column(
@@ -117,8 +117,8 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
                   height: _paginaActual == i ? 20 : 6,
                   decoration: BoxDecoration(
                     color: _paginaActual == i
-                        ? AppTheme.accentRed
-                        : AppTheme.accentRed.withValues(alpha: 0.3),
+                        ? AppTheme.accentGold
+                        : AppTheme.accentGold.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),
@@ -174,7 +174,7 @@ class _FlechaParpadeoState extends State<_FlechaParpadeo>
         child: const Icon(
           Icons.keyboard_arrow_down_rounded,
           size: 42,
-          color: AppTheme.accentRed,
+          color: AppTheme.accentGold,
         ),
       ),
     );
@@ -289,7 +289,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
       SnackBar(
         content: Text('${widget.producto.nombre} añadido'),
         duration: const Duration(seconds: 2),
-        backgroundColor: AppTheme.accentRed,
+        backgroundColor: AppTheme.accentGold,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -331,7 +331,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
@@ -403,7 +403,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CircularProgressIndicator(
-                          color: AppTheme.accentRed.withValues(alpha: 0.5),
+                          color: AppTheme.accentGold.withValues(alpha: 0.5),
                           strokeWidth: 2,
                         ),
                         const SizedBox(height: 12),
@@ -431,7 +431,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                       children: [
                         const Icon(
                           Icons.view_in_ar_rounded,
-                          color: AppTheme.accentRed,
+                          color: AppTheme.accentGold,
                           size: 16,
                         ),
                         const SizedBox(width: 6),
@@ -439,7 +439,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                           'Ver en realidad aumentada →',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
-                                color: AppTheme.accentRed,
+                                color: AppTheme.accentGold,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 11,
                               ),
@@ -505,7 +505,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
@@ -534,7 +534,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                 Text(
                   p.categoriaNombre.toUpperCase(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 1,
                     fontSize: 10,
@@ -564,7 +564,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                           '${p.precio.toStringAsFixed(2)} €',
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: AppTheme.accentRed,
+                                color: AppTheme.accentGold,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),

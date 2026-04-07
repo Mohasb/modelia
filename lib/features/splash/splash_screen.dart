@@ -266,9 +266,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           style: TextStyle(
                             color: _isDark
                                 ? const Color(0xFF8B6914)
-                                : const Color(
-                                    0xFF6B4A0A,
-                                  ),
+                                : const Color(0xFF6B4A0A),
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 4,

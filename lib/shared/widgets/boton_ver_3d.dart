@@ -15,7 +15,7 @@ class BotonVer3D extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: AppTheme.accentRed.withValues(alpha: 0.3),
+            color: AppTheme.accentGold.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -27,12 +27,12 @@ class BotonVer3D extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppTheme.accentRed.withValues(alpha: 0.1),
+                color: AppTheme.accentGold.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.threed_rotation_rounded,
-                color: AppTheme.accentRed,
+                color: AppTheme.accentGold,
                 size: 22,
               ),
             ),
@@ -45,7 +45,7 @@ class BotonVer3D extends StatelessWidget {
                   'Ver en 3D',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                   ),
                 ),
                 Text(
@@ -62,7 +62,7 @@ class BotonVer3D extends StatelessWidget {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 14,
-              color: AppTheme.accentRed.withValues(alpha: 0.6),
+              color: AppTheme.accentGold.withValues(alpha: 0.6),
             ),
           ],
         ),

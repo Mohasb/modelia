@@ -225,7 +225,7 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CircularProgressIndicator(color: AppTheme.accentRed),
+                        CircularProgressIndicator(color: AppTheme.accentGold),
                         SizedBox(height: 12),
                         Text('Cargando modelo...'),
                       ],

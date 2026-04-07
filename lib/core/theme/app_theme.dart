@@ -3,7 +3,7 @@ import 'package:modelia/shared/models/tema_config.dart';
 
 class AppTheme {
   // Colores por defecto para acceso estático
-  static const Color accentRed = Color(0xFFD4A017);
+  static const Color accentGold = Color(0xFFD4A017);
 
   static ThemeData light([TemaConfig? config]) {
     final c = config ?? const TemaConfig();

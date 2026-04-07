@@ -20,7 +20,6 @@ import 'package:modelia/features/admin/screens/admin_productos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_pedidos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_categorias_screen.dart';
 import 'package:modelia/features/admin/screens/admin_usuarios_screen.dart';
-import 'package:modelia/tools/icon_capture_screen.dart';
 import 'package:modelia/visor-prueba.dart';
 
 // Listenable que solo notifica cuando cambian isLogueado o sesionExpirada
@@ -134,10 +133,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const VisorPruebaScreen(),
           ),
         ],
-      ),
-      GoRoute(
-        path: '/icon-capture',
-        builder: (context, state) => const IconCaptureScreen(),
       ),
       GoRoute(
         path: '/producto/:id',

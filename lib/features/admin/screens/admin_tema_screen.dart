@@ -75,7 +75,7 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
             },
             child: const Text(
               'Resetear',
-              style: TextStyle(color: AppTheme.accentRed),
+              style: TextStyle(color: AppTheme.accentGold),
             ),
           ),
         ],
@@ -100,7 +100,7 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
             onPressed: _resetear,
             child: const Text(
               'Resetear',
-              style: TextStyle(color: AppTheme.accentRed),
+              style: TextStyle(color: AppTheme.accentGold),
             ),
           ),
         ],

@@ -40,7 +40,7 @@ class ArViewerScreen extends ConsumerWidget {
           return VisorWindows(modelUrl: modelUrl);
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(
           child: Text(

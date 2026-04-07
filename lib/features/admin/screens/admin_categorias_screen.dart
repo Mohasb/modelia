@@ -29,7 +29,7 @@ class AdminCategoriasScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref, null),
-        backgroundColor: AppTheme.accentRed,
+        backgroundColor: AppTheme.accentGold,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add_rounded),
         label: const Text('Nueva categoría'),
@@ -57,12 +57,12 @@ class AdminCategoriasScreen extends ConsumerWidget {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: AppTheme.accentRed.withValues(alpha: 0.1),
+                            color: AppTheme.accentGold.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
                             Icons.category_outlined,
-                            color: AppTheme.accentRed,
+                            color: AppTheme.accentGold,
                             size: 20,
                           ),
                         ),
@@ -101,7 +101,7 @@ class AdminCategoriasScreen extends ConsumerWidget {
                 },
               ),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(child: Text(e.toString())),
       ),
@@ -177,7 +177,7 @@ class _FormularioCategoriaState extends ConsumerState<_FormularioCategoria> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: AppTheme.accentRed,
+            backgroundColor: AppTheme.accentGold,
           ),
         );
       }

@@ -175,7 +175,7 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                       Text(
                         _labelOrden(orden),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.accentRed,
+                          color: AppTheme.accentGold,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -203,7 +203,7 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
           // ── Grid productos ────────────────────────────
           Expanded(
             child: RefreshIndicator(
-              color: AppTheme.accentRed,
+              color: AppTheme.accentGold,
               onRefresh: () async {
                 ref.invalidate(_productosCatalogoProvider);
                 ref.invalidate(destacadosProvider);
@@ -224,7 +224,7 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                             ProductoCard(producto: productos[index]),
                       ),
                 loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppTheme.accentRed),
+                  child: CircularProgressIndicator(color: AppTheme.accentGold),
                 ),
                 error: (e, _) => Center(
                   child: Column(
@@ -386,7 +386,7 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.accentRed,
+                                      color: AppTheme.accentGold,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: const Text(
@@ -444,8 +444,8 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
               height: 6,
               decoration: BoxDecoration(
                 color: _paginaActual == i
-                    ? AppTheme.accentRed
-                    : AppTheme.accentRed.withValues(alpha: 0.3),
+                    ? AppTheme.accentGold
+                    : AppTheme.accentGold.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(3),
               ),
             ),

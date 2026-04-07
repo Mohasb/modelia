@@ -44,7 +44,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString().replaceAll('Exception: ', '')),
-          backgroundColor: AppTheme.accentRed,
+          backgroundColor: AppTheme.accentGold,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -155,7 +155,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       '${total.toStringAsFixed(2)} €',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                       ),
                     ),
                   ],
@@ -203,7 +203,7 @@ class _SeccionUsuario extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: const BoxDecoration(
-              color: AppTheme.accentRed,
+              color: AppTheme.accentGold,
               shape: BoxShape.circle,
             ),
             child: Center(

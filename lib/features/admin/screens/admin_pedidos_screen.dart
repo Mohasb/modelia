@@ -42,7 +42,7 @@ class AdminPedidosScreen extends ConsumerWidget {
                     _PedidoAdminCard(pedido: pedidos[index]),
               ),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(child: Text(e.toString())),
       ),
@@ -142,7 +142,8 @@ class _PedidoAdminCard extends ConsumerWidget {
                                         ).showSnackBar(
                                           SnackBar(
                                             content: Text(e.toString()),
-                                            backgroundColor: AppTheme.accentRed,
+                                            backgroundColor:
+                                                AppTheme.accentGold,
                                           ),
                                         );
                                       }

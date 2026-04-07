@@ -29,7 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Introduce email y contraseña'),
-          backgroundColor: AppTheme.accentRed,
+          backgroundColor: AppTheme.accentGold,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -54,7 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.error!),
-            backgroundColor: AppTheme.accentRed,
+            backgroundColor: AppTheme.accentGold,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -216,7 +216,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: const Text(
                       'Regístrate',
                       style: TextStyle(
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

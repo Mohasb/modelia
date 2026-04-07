@@ -35,7 +35,7 @@ class AdminProductosScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _mostrarFormulario(context, ref, null),
-        backgroundColor: AppTheme.accentRed,
+        backgroundColor: AppTheme.accentGold,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add_rounded),
         label: const Text('Nuevo producto'),
@@ -58,7 +58,7 @@ class AdminProductosScreen extends ConsumerWidget {
                 ),
               ),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(child: Text(e.toString())),
       ),
@@ -97,7 +97,7 @@ class AdminProductosScreen extends ConsumerWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: AppTheme.accentRed,
+            backgroundColor: AppTheme.accentGold,
           ),
         );
       }
@@ -142,7 +142,7 @@ class AdminProductosScreen extends ConsumerWidget {
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text(
               'Eliminar',
-              style: TextStyle(color: AppTheme.accentRed),
+              style: TextStyle(color: AppTheme.accentGold),
             ),
           ),
         ],
@@ -160,7 +160,7 @@ class AdminProductosScreen extends ConsumerWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(e.toString().replaceAll('Exception: ', '')),
-              backgroundColor: AppTheme.accentRed,
+              backgroundColor: AppTheme.accentGold,
             ),
           );
         }
@@ -263,7 +263,7 @@ class _ProductoAdminCard extends StatelessWidget {
                 Text(
                   producto.categoriaNombre,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     fontSize: 11,
                   ),
                 ),
@@ -401,7 +401,7 @@ class _FormularioProductoState extends ConsumerState<_FormularioProducto> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: AppTheme.accentRed,
+            backgroundColor: AppTheme.accentGold,
           ),
         );
       }

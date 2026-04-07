@@ -28,7 +28,7 @@ class AdminDashboardScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Panel de administración')),
       body: RefreshIndicator(
-        color: AppTheme.accentRed,
+        color: AppTheme.accentGold,
         onRefresh: () async => ref.invalidate(_statsProvider),
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -68,12 +68,12 @@ class AdminDashboardScreen extends ConsumerWidget {
                       label: 'Usuarios',
                       valor: '${stats['usuarios']}',
                       icon: Icons.people_outline_rounded,
-                      color: AppTheme.accentRed,
+                      color: AppTheme.accentGold,
                     ),
                   ],
                 ),
                 loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppTheme.accentRed),
+                  child: CircularProgressIndicator(color: AppTheme.accentGold),
                 ),
                 error: (e, _) => Center(child: Text(e.toString())),
               ),
@@ -115,7 +115,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                 icon: Icons.people_outline_rounded,
                 label: 'Usuarios',
                 descripcion: 'Ver y gestionar usuarios',
-                color: AppTheme.accentRed,
+                color: AppTheme.accentGold,
                 onTap: () => context.go('/admin/usuarios'),
               ),
               const SizedBox(height: 8),

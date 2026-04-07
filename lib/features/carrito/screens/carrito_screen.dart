@@ -45,7 +45,7 @@ class CarritoScreen extends ConsumerWidget {
                         },
                         child: const Text(
                           'Vaciar',
-                          style: TextStyle(color: AppTheme.accentRed),
+                          style: TextStyle(color: AppTheme.accentGold),
                         ),
                       ),
                     ],
@@ -54,7 +54,7 @@ class CarritoScreen extends ConsumerWidget {
               },
               child: const Text(
                 'Vaciar',
-                style: TextStyle(color: AppTheme.accentRed),
+                style: TextStyle(color: AppTheme.accentGold),
               ),
             ),
         ],
@@ -143,7 +143,7 @@ class _CarritoItemCard extends ConsumerWidget {
                 Text(
                   '${item.producto.precio.toStringAsFixed(2)} €',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -267,7 +267,7 @@ class _ResumenCarrito extends ConsumerWidget {
                 '${total.toStringAsFixed(2)} €',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: AppTheme.accentRed,
+                  color: AppTheme.accentGold,
                 ),
               ),
             ],

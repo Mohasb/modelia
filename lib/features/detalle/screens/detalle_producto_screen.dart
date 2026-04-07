@@ -32,7 +32,7 @@ class DetalleProductoScreen extends ConsumerWidget {
       body: productoAsync.when(
         data: (producto) => _DetalleContent(producto: producto),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(
           child: Column(
@@ -80,7 +80,7 @@ class _DetalleContent extends ConsumerWidget {
                           fit: BoxFit.cover,
                           placeholder: (_, __) => const Center(
                             child: CircularProgressIndicator(
-                              color: AppTheme.accentRed,
+                              color: AppTheme.accentGold,
                               strokeWidth: 2,
                             ),
                           ),
@@ -106,7 +106,7 @@ class _DetalleContent extends ConsumerWidget {
                       Text(
                         producto.categoriaNombre.toUpperCase(),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: AppTheme.accentRed,
+                          color: AppTheme.accentGold,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 1,
                         ),
@@ -128,7 +128,7 @@ class _DetalleContent extends ConsumerWidget {
                             '${producto.precio.toStringAsFixed(2)} €',
                             style: Theme.of(context).textTheme.headlineMedium
                                 ?.copyWith(
-                                  color: AppTheme.accentRed,
+                                  color: AppTheme.accentGold,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
@@ -214,7 +214,7 @@ class _DetalleContent extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('${producto.nombre} añadido al carrito'),
-                        backgroundColor: AppTheme.accentRed,
+                        backgroundColor: AppTheme.accentGold,
                         behavior: SnackBarBehavior.floating,
                         margin: EdgeInsets.only(
                           bottom: MediaQuery.of(context).size.height - 150,

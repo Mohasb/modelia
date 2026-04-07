@@ -57,7 +57,7 @@ class PerfilScreen extends ConsumerWidget {
       body: perfilAsync.when(
         data: (usuario) => _PerfilContent(usuario: usuario),
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppTheme.accentRed),
+          child: CircularProgressIndicator(color: AppTheme.accentGold),
         ),
         error: (e, _) => Center(child: Text(e.toString())),
       ),
@@ -142,7 +142,7 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                   width: 80,
                   height: 80,
                   decoration: const BoxDecoration(
-                    color: AppTheme.accentRed,
+                    color: AppTheme.accentGold,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -171,7 +171,7 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                   ),
                   decoration: BoxDecoration(
                     color: widget.usuario.rol == 'ADMIN'
-                        ? AppTheme.accentRed.withValues(alpha: 0.1)
+                        ? AppTheme.accentGold.withValues(alpha: 0.1)
                         : colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -181,7 +181,7 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: widget.usuario.rol == 'ADMIN'
-                          ? AppTheme.accentRed
+                          ? AppTheme.accentGold
                           : colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
@@ -216,7 +216,7 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                         child: const Text(
                           'Editar',
                           style: TextStyle(
-                            color: AppTheme.accentRed,
+                            color: AppTheme.accentGold,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -312,7 +312,7 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
             _AccesoRapido(
               icon: Icons.admin_panel_settings_outlined,
               label: 'Panel de administración',
-              color: AppTheme.accentRed,
+              color: AppTheme.accentGold,
               onTap: () => context.go('/admin'),
             ),
         ],

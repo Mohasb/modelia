@@ -32,7 +32,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Rellena todos los campos'),
-          backgroundColor: AppTheme.accentRed,
+          backgroundColor: AppTheme.accentGold,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -55,7 +55,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(authState.error!),
-          backgroundColor: AppTheme.accentRed,
+          backgroundColor: AppTheme.accentGold,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -190,7 +190,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     child: const Text(
                       'Inicia sesión',
                       style: TextStyle(
-                        color: AppTheme.accentRed,
+                        color: AppTheme.accentGold,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

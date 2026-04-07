@@ -13,7 +13,7 @@ class TemaConfig {
   final String appNombre;
 
   const TemaConfig({
-    this.accentColor = const Color(0xFFE94560),
+    this.accentColor = const Color(0xFFD4A017),
     this.lightBg = const Color(0xFFFFFFFF),
     this.lightSurface = const Color(0xFFF5F5F7),
     this.lightCard = const Color(0xFFF5F5F7),
@@ -63,7 +63,7 @@ class TemaConfig {
   };
 
   factory TemaConfig.fromJson(Map<String, dynamic> json) => TemaConfig(
-    accentColor: Color(json['accentColor'] ?? 0xFFE94560),
+    accentColor: Color(json['accentColor'] ?? 0xFFD4A017),
     lightBg: Color(json['lightBg'] ?? 0xFFFFFFFF),
     lightSurface: Color(json['lightSurface'] ?? 0xFFF5F5F7),
     lightCard: Color(json['lightCard'] ?? 0xFFF5F5F7),
