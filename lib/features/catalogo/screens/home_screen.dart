@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:modelia/features/detalle/screens/visor_windows.dart'
+    if (dart.library.html) 'package:modelia/features/detalle/screens/visor_stub.dart';
 import 'package:modelia/shared/providers/productos_provider.dart';
 import 'package:modelia/shared/models/producto.dart';
 import 'package:modelia/shared/providers/carrito_provider.dart';
@@ -79,8 +81,6 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
 
   @override
   Widget build(BuildContext context) {
-    final hayMas = _paginaActual < widget.productos.length - 1;
-
     return Stack(
       children: [
         PageView.builder(
@@ -91,6 +91,12 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
             producto: widget.productos[index],
             esVisible: index == _paginaActual,
             hayMasProductos: index < widget.productos.length - 1,
+            onSiguientePagina: () {
+              _pageController.nextPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            },
           ),
         ),
 
@@ -178,7 +184,8 @@ class _FlechaParpadeoState extends State<_FlechaParpadeo>
 // ── Efecto bounce inicial ──────────────────────────────────
 
 class _BounceHint extends StatefulWidget {
-  const _BounceHint();
+  final VoidCallback? onTap; // ← nuevo
+  const _BounceHint({this.onTap});
 
   @override
   State<_BounceHint> createState() => _BounceHintState();
@@ -218,13 +225,16 @@ class _BounceHintState extends State<_BounceHint>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _offsetAnim,
-      builder: (_, child) => Transform.translate(
-        offset: Offset(0, _offsetAnim.value),
-        child: child,
+    return GestureDetector(
+      onTap: widget.onTap, // ← tappable
+      child: AnimatedBuilder(
+        animation: _offsetAnim,
+        builder: (_, child) => Transform.translate(
+          offset: Offset(0, _offsetAnim.value),
+          child: child,
+        ),
+        child: const _FlechaParpadeo(),
       ),
-      child: const _FlechaParpadeo(),
     );
   }
 }
@@ -235,11 +245,13 @@ class _PaginaProducto extends ConsumerStatefulWidget {
   final Producto producto;
   final bool esVisible;
   final bool hayMasProductos;
+  final VoidCallback? onSiguientePagina;
 
   const _PaginaProducto({
     required this.producto,
     required this.esVisible,
     required this.hayMasProductos,
+    this.onSiguientePagina,
   });
 
   @override
@@ -290,6 +302,8 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     final colorScheme = Theme.of(context).colorScheme;
     final tieneModelo = p.modeloGlbUrl != null && p.modeloGlbUrl!.isNotEmpty;
     final esAndroid = defaultTargetPlatform == TargetPlatform.android;
+    final esWindows = defaultTargetPlatform == TargetPlatform.windows;
+    final soportaModelo = esAndroid || esWindows;
     final screenH = MediaQuery.of(context).size.height;
 
     // Foto + modelo = 50% de pantalla
@@ -299,7 +313,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     return Column(
       children: [
         // ── BANDA FOTO + DESTACADO ──────────────────────
-        if (tieneModelo && esAndroid)
+        if (tieneModelo && soportaModelo)
           SizedBox(
             height: alturaFoto,
             width: double.infinity,
@@ -361,7 +375,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           ),
 
         // ── MODELO 3D + BANDA AR dentro del mismo Stack ──────────
-        if (tieneModelo && esAndroid)
+        if (tieneModelo && soportaModelo)
           SizedBox(
             height: alturaModelo,
             width: double.infinity,
@@ -371,16 +385,18 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                 Container(color: colorScheme.surfaceContainerHighest),
 
                 if (_mostrarModelo)
-                  ModelViewer(
-                    src: p.modeloGlbUrl!,
-                    alt: p.nombre,
-                    ar: true,
-                    arModes: const ['scene-viewer', 'webxr'],
-                    autoRotate: true,
-                    cameraControls: true,
-                    backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                    shadowIntensity: 0.6,
-                  )
+                  esAndroid
+                      ? ModelViewer(
+                          src: p.modeloGlbUrl!,
+                          alt: p.nombre,
+                          ar: true,
+                          arModes: const ['scene-viewer', 'webxr'],
+                          autoRotate: true,
+                          cameraControls: true,
+                          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+                          shadowIntensity: 0.6,
+                        )
+                      : VisorWindows(modelUrl: p.modeloGlbUrl!)
                 else
                   Center(
                     child: Column(
@@ -401,7 +417,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                       ],
                     ),
                   ),
-
                 // Banda AR superpuesta en la parte inferior — IgnorePointer
                 // para no bloquear el botón AR nativo que está abajo derecha
                 Positioned(
@@ -438,7 +453,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           ),
 
         // Sin modelo — imagen grande
-        if (!tieneModelo || !esAndroid)
+        if (!tieneModelo || !soportaModelo)
           SizedBox(
             height: alturaFoto + alturaModelo,
             width: double.infinity,
@@ -626,9 +641,9 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
 
                 // Flecha bounce justo debajo de los botones
                 if (widget.hayMasProductos)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 2),
-                    child: Center(child: _BounceHint()),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: _BounceHint(onTap: widget.onSiguientePagina),
                   )
                 else
                   const SizedBox(height: 8),

@@ -21,6 +21,7 @@ import 'package:modelia/features/admin/screens/admin_pedidos_screen.dart';
 import 'package:modelia/features/admin/screens/admin_categorias_screen.dart';
 import 'package:modelia/features/admin/screens/admin_usuarios_screen.dart';
 import 'package:modelia/tools/icon_capture_screen.dart';
+import 'package:modelia/visor-prueba.dart';
 
 // Listenable que solo notifica cuando cambian isLogueado o sesionExpirada
 // NO cuando cambia isLoading o error
@@ -127,6 +128,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/tema',
             builder: (context, state) => const AdminTemaScreen(),
+          ),
+          GoRoute(
+            path: '/admin/visorPrueba',
+            builder: (context, state) => const VisorPruebaScreen(),
           ),
         ],
       ),
