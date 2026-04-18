@@ -13,10 +13,6 @@
         android:name="com.google.ar.core"
         android:value="optional"/>
 
-    <meta-data
-        android:name="io.flutter.embedding.android.EnableImpeller"
-        android:value="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

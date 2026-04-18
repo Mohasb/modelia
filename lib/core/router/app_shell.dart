@@ -212,7 +212,7 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/icons/icon.png',
+            'assets/icons/icon_header.png',
             width: 32,
             height: 32,
             fit: BoxFit.contain,
@@ -320,9 +320,9 @@ class _ModeliaBottomNav extends StatelessWidget {
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home_rounded),
-          label: 'Inicio',
+          icon: Icon(Icons.star_border_outlined),
+          activeIcon: Icon(Icons.star),
+          label: 'Destacados',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.grid_view_outlined),

@@ -1,14 +1,23 @@
-Arreglar icono y splash screen
 arregla modo apaisado
+probar todas las funcionalidades
+generar muchos más productos con imagen coherent. e pero glb el mismo(el de que no hay modelo)
+Algun juego ???
+mejorar el model viewer v2 con la lista de modelos
+
+la flechita de bajar producto al medio
+el model viwer si esta en ligth que sea blanco y al reves
+
+en pc catalogo -> que sea responsive el listado de productos y lo arriba a ver
+en pc no va el render v2
 
 
 
 
 
+por si da cors usar esta ruta https://cdn.jsdelivr.net/gh/mohasb/modelia-assets/main/NoCategory/NeilArmstrong.glb
+si no la directa a github https://raw.githubusercontent.com/mohasb/modelia-assets/main/NoCategory/NeilArmstrong.glb
 
-https://cdn.jsdelivr.net/gh/mohasb/modelia-assets/main/NoCategory/NeilArmstrong.glb
-https://raw.githubusercontent.com/mohasb/modelia-assets/main/NoCategory/NeilArmstrong.glb
 
-
-para splash y icono: primero meter el .png a assets/splash y luego ejecutar los comandos de la foto 
-poner en la ruta: / -> /icon-capture y ejecutar en windows para capturar el icono
+1 - para splash y icono: primero meter el .png a assets/splash y
+2 - poner en la ruta: / -> /icon-capture y ejecutar en windows para capturar el icono y pegar en icons. 
+3 - luego ejecutar los comandos de la foto 

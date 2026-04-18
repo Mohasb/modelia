@@ -35,7 +35,7 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
   int _totalMateriales = 1;
 
   static const String _modelUrl =
-      'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb';
+      'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/MaterialsVariantsShoe/glTF-Binary/MaterialsVariantsShoe.glb';
 
   @override
   void initState() {
