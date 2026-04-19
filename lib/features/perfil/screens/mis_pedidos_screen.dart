@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/shared/providers/api_provider.dart';
 import 'package:modelia/shared/models/pedido.dart';
@@ -171,7 +172,7 @@ class _PedidoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Pedido #${pedido.id}',
+                'Pedido: ${DateFormat('dd/MM/yyyy HH:mm:ss').format(pedido.createdAt)}',
                 style: Theme.of(
                   context,
                 ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),

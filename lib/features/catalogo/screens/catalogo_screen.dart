@@ -53,6 +53,14 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
     super.dispose();
   }
 
+  // Número de columnas responsive según el ancho disponible
+  int _columnasPorAncho(double width) {
+    if (width >= 1200) return 5;
+    if (width >= 900) return 4;
+    if (width >= 600) return 3;
+    return 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     final productosAsync = ref.watch(_productosCatalogoProvider);
@@ -60,193 +68,230 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
     final categoriaId = ref.watch(_categoriaFiltroCatalogoProvider);
     final categoriasAsync = ref.watch(categoriasProvider);
     final destacadosAsync = ref.watch(destacadosProvider);
-    final isWindows = Theme.of(context).platform == TargetPlatform.windows;
 
     return Scaffold(
-      body: Column(
-        children: [
-          // ── Banner slider destacados ──────────────────
-          destacadosAsync.when(
-            data: (destacados) => destacados.isEmpty
-                ? const SizedBox.shrink()
-                : _SliderDestacados(productos: destacados),
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
+      body: RefreshIndicator(
+        color: AppTheme.accentGold,
+        onRefresh: () async {
+          ref.invalidate(_productosCatalogoProvider);
+          ref.invalidate(destacadosProvider);
+        },
+        // CustomScrollView permite que el slider y el grid compartan
+        // un solo scroll, eliminando el overflow y el scroll bloqueado
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final columnas = _columnasPorAncho(constraints.maxWidth);
 
-          // ── Barra búsqueda ────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (v) {
-                ref.read(_busquedaCatalogoProvider.notifier).state = v;
-                ref.invalidate(_productosCatalogoProvider);
-              },
-              decoration: InputDecoration(
-                hintText: 'Buscar productos...',
-                prefixIcon: const Icon(Icons.search_rounded, size: 20),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        onPressed: () {
-                          _searchController.clear();
-                          ref.read(_busquedaCatalogoProvider.notifier).state =
-                              '';
-                          ref.invalidate(_productosCatalogoProvider);
-                        },
-                        icon: const Icon(Icons.close_rounded, size: 18),
-                      )
-                    : null,
-              ),
-            ),
-          ),
+            return CustomScrollView(
+              slivers: [
+                // ── Banner slider destacados ──────────────
+                SliverToBoxAdapter(
+                  child: destacadosAsync.when(
+                    data: (destacados) => destacados.isEmpty
+                        ? const SizedBox.shrink()
+                        : _SliderDestacados(productos: destacados),
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  ),
+                ),
 
-          // ── Chips categorías + ordenación ─────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 36,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: FilterChip(
-                            label: const Text('Todos'),
-                            selected: categoriaId == null,
-                            onSelected: (_) {
-                              ref
+                // ── Barra búsqueda ──────────────────────
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: (v) {
+                        ref
+                            .read(_busquedaCatalogoProvider.notifier)
+                            .state = v;
+                        ref.invalidate(_productosCatalogoProvider);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Buscar productos...',
+                        prefixIcon:
+                            const Icon(Icons.search_rounded, size: 20),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                onPressed: () {
+                                  _searchController.clear();
+                                  ref
                                       .read(
-                                        _categoriaFiltroCatalogoProvider
-                                            .notifier,
-                                      )
-                                      .state =
-                                  null;
-                              ref.invalidate(_productosCatalogoProvider);
-                            },
-                          ),
-                        ),
-                        ...categoriasAsync.when(
-                          data: (cats) => cats
-                              .map(
-                                (c) => Padding(
+                                          _busquedaCatalogoProvider.notifier)
+                                      .state = '';
+                                  ref.invalidate(_productosCatalogoProvider);
+                                },
+                                icon: const Icon(Icons.close_rounded,
+                                    size: 18),
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ── Chips categorías + ordenación ─────────
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 36,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Padding(
                                   padding: const EdgeInsets.only(right: 8),
                                   child: FilterChip(
-                                    label: Text(c.nombre),
-                                    selected: categoriaId == c.id,
+                                    label: const Text('Todos'),
+                                    selected: categoriaId == null,
                                     onSelected: (_) {
                                       ref
-                                              .read(
-                                                _categoriaFiltroCatalogoProvider
-                                                    .notifier,
-                                              )
-                                              .state =
-                                          c.id;
+                                          .read(
+                                              _categoriaFiltroCatalogoProvider
+                                                  .notifier)
+                                          .state = null;
                                       ref.invalidate(
-                                        _productosCatalogoProvider,
-                                      );
+                                          _productosCatalogoProvider);
                                     },
                                   ),
                                 ),
-                              )
-                              .toList(),
-                          loading: () => [],
-                          error: (_, __) => [],
+                                ...categoriasAsync.when(
+                                  data: (cats) => cats
+                                      .map(
+                                        (c) => Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 8),
+                                          child: FilterChip(
+                                            label: Text(c.nombre),
+                                            selected: categoriaId == c.id,
+                                            onSelected: (_) {
+                                              ref
+                                                  .read(
+                                                      _categoriaFiltroCatalogoProvider
+                                                          .notifier)
+                                                  .state = c.id;
+                                              ref.invalidate(
+                                                  _productosCatalogoProvider);
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  loading: () => [],
+                                  error: (_, __) => [],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                          initialValue: orden,
+                          onSelected: (v) {
+                            ref
+                                .read(_ordenCatalogoProvider.notifier)
+                                .state = v;
+                            ref.invalidate(_productosCatalogoProvider);
+                          },
+                          icon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.sort_rounded, size: 20),
+                              const SizedBox(width: 4),
+                              Text(
+                                _labelOrden(orden),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: AppTheme.accentGold,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
+                          ),
+                          itemBuilder: (context) => const [
+                            PopupMenuItem(
+                                value: 'nombre',
+                                child: Text('Nombre A-Z')),
+                            PopupMenuItem(
+                                value: 'precio_asc',
+                                child: Text('Precio: menor a mayor')),
+                            PopupMenuItem(
+                                value: 'precio_desc',
+                                child: Text('Precio: mayor a menor')),
+                            PopupMenuItem(
+                                value: 'novedades',
+                                child: Text('Novedades')),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                // Botón ordenación
-                PopupMenuButton<String>(
-                  initialValue: orden,
-                  onSelected: (v) {
-                    ref.read(_ordenCatalogoProvider.notifier).state = v;
-                    ref.invalidate(_productosCatalogoProvider);
-                  },
-                  icon: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.sort_rounded, size: 20),
-                      const SizedBox(width: 4),
-                      Text(
-                        _labelOrden(orden),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.accentGold,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(value: 'nombre', child: Text('Nombre A-Z')),
-                    PopupMenuItem(
-                      value: 'precio_asc',
-                      child: Text('Precio: menor a mayor'),
-                    ),
-                    PopupMenuItem(
-                      value: 'precio_desc',
-                      child: Text('Precio: mayor a menor'),
-                    ),
-                    PopupMenuItem(value: 'novedades', child: Text('Novedades')),
-                  ],
+
+                const SliverToBoxAdapter(
+                  child: Divider(height: 0.5),
                 ),
+
+                // ── Grid productos responsive ─────────────
+                productosAsync.when(
+                  data: (productos) => productos.isEmpty
+                      ? const SliverFillRemaining(
+                          child: Center(child: Text('No hay productos')),
+                        )
+                      : SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) => ProductoCard(
+                                  producto: productos[index]),
+                              childCount: productos.length,
+                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: columnas,
+                              mainAxisSpacing: 12,
+                              crossAxisSpacing: 12,
+                              mainAxisExtent: 260,
+                            ),
+                          ),
+                        ),
+                  loading: () => const SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                          color: AppTheme.accentGold),
+                    ),
+                  ),
+                  error: (e, _) => SliverFillRemaining(
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.wifi_off_rounded, size: 48),
+                          const SizedBox(height: 16),
+                          Text(e.toString().replaceAll('Exception: ', '')),
+                          const SizedBox(height: 16),
+                          FilledButton.icon(
+                            onPressed: () =>
+                                ref.invalidate(_productosCatalogoProvider),
+                            icon: const Icon(Icons.refresh_rounded),
+                            label: const Text('Reintentar'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Padding inferior
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
               ],
-            ),
-          ),
-
-          const Divider(height: 0.5),
-
-          // ── Grid productos ────────────────────────────
-          Expanded(
-            child: RefreshIndicator(
-              color: AppTheme.accentGold,
-              onRefresh: () async {
-                ref.invalidate(_productosCatalogoProvider);
-                ref.invalidate(destacadosProvider);
-              },
-              child: productosAsync.when(
-                data: (productos) => productos.isEmpty
-                    ? const Center(child: Text('No hay productos'))
-                    : GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: isWindows ? 3 : 2,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          mainAxisExtent: 260,
-                        ),
-                        itemCount: productos.length,
-                        itemBuilder: (context, index) =>
-                            ProductoCard(producto: productos[index]),
-                      ),
-                loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppTheme.accentGold),
-                ),
-                error: (e, _) => Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.wifi_off_rounded, size: 48),
-                      const SizedBox(height: 16),
-                      Text(e.toString().replaceAll('Exception: ', '')),
-                      const SizedBox(height: 16),
-                      FilledButton.icon(
-                        onPressed: () =>
-                            ref.invalidate(_productosCatalogoProvider),
-                        icon: const Icon(Icons.refresh_rounded),
-                        label: const Text('Reintentar'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -321,14 +366,12 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
                 onTap: () => context.push('/producto/${p.id}'),
                 child: Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 8,
-                  ),
+                      horizontal: 6, vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest,
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: Stack(
@@ -338,8 +381,8 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
                         CachedNetworkImage(
                           imageUrl: p.imagenUrl!,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) =>
-                              const Icon(Icons.image_not_supported_outlined),
+                          errorWidget: (_, __, ___) => const Icon(
+                              Icons.image_not_supported_outlined),
                         )
                       else
                         Container(
@@ -347,11 +390,13 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
                             gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: [Color(0xFF1D1D1F), Color(0xFF3A3A3C)],
+                              colors: [
+                                Color(0xFF1D1D1F),
+                                Color(0xFF3A3A3C)
+                              ],
                             ),
                           ),
                         ),
-                      // Gradiente
                       Positioned.fill(
                         child: DecoratedBox(
                           decoration: BoxDecoration(
@@ -366,28 +411,28 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
                           ),
                         ),
                       ),
-                      // Info
                       Positioned(
                         left: 12,
                         right: 12,
                         bottom: 12,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Expanded(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 7,
-                                      vertical: 2,
-                                    ),
+                                        horizontal: 7, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: AppTheme.accentGold,
-                                      borderRadius: BorderRadius.circular(5),
+                                      borderRadius:
+                                          BorderRadius.circular(5),
                                     ),
                                     child: const Text(
                                       'DESTACADO',
@@ -432,7 +477,6 @@ class _SliderDestacadosState extends State<_SliderDestacados> {
             },
           ),
         ),
-        // Indicadores
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
