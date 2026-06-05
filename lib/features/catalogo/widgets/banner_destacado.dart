@@ -19,7 +19,6 @@ class BannerDestacado extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          // Círculo decorativo
           Positioned(
             right: -20,
             bottom: -20,
@@ -44,7 +43,6 @@ class BannerDestacado extends StatelessWidget {
               ),
             ),
           ),
-          // Contenido
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(

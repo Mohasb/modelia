@@ -47,8 +47,6 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-// ── Vista paginada ─────────────────────────────────────────
-
 class _VistaDestacados extends StatefulWidget {
   final List<Producto> productos;
   const _VistaDestacados({required this.productos});
@@ -100,7 +98,6 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
           ),
         ),
 
-        // Indicador lateral derecho
         Positioned(
           right: 12,
           top: 0,
@@ -131,7 +128,6 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
   }
 }
 
-// ── Flecha parpadeante ─────────────────────────────────────
 
 class _FlechaParpadeo extends StatefulWidget {
   const _FlechaParpadeo();
@@ -179,8 +175,6 @@ class _FlechaParpadeoState extends State<_FlechaParpadeo>
     );
   }
 }
-
-// ── Efecto bounce inicial ──────────────────────────────────
 
 class _BounceHint extends StatefulWidget {
   final VoidCallback? onTap;
@@ -236,8 +230,6 @@ class _BounceHintState extends State<_BounceHint>
     );
   }
 }
-
-// ── Página de producto ─────────────────────────────────────
 
 class _PaginaProducto extends ConsumerStatefulWidget {
   final Producto producto;
@@ -303,7 +295,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     final esWindows = defaultTargetPlatform == TargetPlatform.windows;
     final soportaModelo = esAndroid || esWindows;
 
-    // Orientación: en landscape cambiamos a layout horizontal
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -314,7 +305,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
             context, p, colorScheme, tieneModelo, soportaModelo, esAndroid);
   }
 
-  // ── Portrait ──────────────────────────────────────────────
 
   Widget _buildPortrait(
     BuildContext context,
@@ -330,19 +320,15 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
 
     return Column(
       children: [
-        // Banda foto + destacado
         if (tieneModelo && soportaModelo)
           _bandaFoto(p, colorScheme, alturaFoto),
 
-        // Modelo 3D
         if (tieneModelo && soportaModelo)
           _areaModelo(context, p, colorScheme, alturaModelo, esAndroid),
 
-        // Sin modelo — imagen grande
         if (!tieneModelo || !soportaModelo)
           _imagenSinModelo(p, colorScheme, alturaFoto + alturaModelo),
 
-        // Info + botones
         Expanded(
           child: _infoYBotones(context, p, colorScheme),
         ),
@@ -350,7 +336,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     );
   }
 
-  // ── Landscape ─────────────────────────────────────────────
 
   Widget _buildLandscape(
     BuildContext context,
@@ -362,7 +347,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
   ) {
     return Row(
       children: [
-        // Lado izquierdo: modelo o imagen (60% del ancho)
         Expanded(
           flex: 6,
           child: Stack(
@@ -408,7 +392,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                     size: 48,
                     color: colorScheme.onSurface.withValues(alpha: 0.3)),
 
-              // Badge DESTACADO
               Positioned(
                 top: 8,
                 left: 8,
@@ -432,7 +415,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                 ),
               ),
 
-              // Badge AR
               if (tieneModelo && soportaModelo)
                 Positioned(
                   bottom: 8,
@@ -462,7 +444,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           ),
         ),
 
-        // Lado derecho: info + botones (40% del ancho)
         Expanded(
           flex: 4,
           child: _infoYBotones(context, p, colorScheme, landscape: true),
@@ -471,7 +452,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     );
   }
 
-  // ── Widgets compartidos ───────────────────────────────────
 
   Widget _bandaFoto(
       Producto p, ColorScheme colorScheme, double alturaFoto) {
@@ -798,8 +778,6 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     );
   }
 }
-
-// ── Sin destacados ─────────────────────────────────────────
 
 class _SinDestacados extends StatelessWidget {
   const _SinDestacados();

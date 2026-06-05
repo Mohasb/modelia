@@ -33,7 +33,6 @@ final productoDetalleProvider = FutureProvider.family<Producto, int>((
   return api.getProductoById(id);
 });
 
-// ── Nuevo ──────────────────────────────────────────────────
 final destacadosProvider = FutureProvider<List<Producto>>((ref) async {
   final api = ref.watch(apiServiceProvider);
   return api.getDestacados();

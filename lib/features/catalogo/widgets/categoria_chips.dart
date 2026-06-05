@@ -16,7 +16,6 @@ class CategoriaChips extends ConsumerWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
-          // Chip "Todos"
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
@@ -28,7 +27,6 @@ class CategoriaChips extends ConsumerWidget {
               },
             ),
           ),
-          // Chips de categorías
           ...categoriasAsync.when(
             data: (categorias) => categorias
                 .map(

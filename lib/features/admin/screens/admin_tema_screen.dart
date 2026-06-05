@@ -7,7 +7,6 @@ import 'package:modelia/shared/providers/theme_provider.dart';
 import 'package:modelia/shared/models/tema_config.dart';
 import 'package:modelia/core/theme/app_theme.dart';
 
-// Provider local para el estado temporal de edición
 final _temaEditadoProvider = StateProvider<TemaConfig>((ref) {
   return ref.read(themeProvider).temaConfig;
 });
@@ -107,7 +106,6 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
       ),
       body: Column(
         children: [
-          // Preview interactiva
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: PreviewTema(
@@ -117,14 +115,12 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
           ),
           const SizedBox(height: 16),
 
-          // Selectores de color
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // En el SingleChildScrollView, antes de _SeccionColores:
                   _SeccionTexto(
                     titulo: 'Nombre de la app',
                     children: [
@@ -227,7 +223,6 @@ class _AdminTemaScreenState extends ConsumerState<AdminTemaScreen>
             ),
           ),
 
-          // Botón aplicar
           Container(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
             decoration: BoxDecoration(
@@ -312,8 +307,6 @@ class _SeccionColores extends StatelessWidget {
   }
 }
 
-// ── Tile de color ──────────────────────────────────────────
-
 class _ColorTile extends ConsumerWidget {
   final String label;
   final String campo;
@@ -392,7 +385,6 @@ class _ColorTile extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () {
-              // Solo actualiza el estado temporal, NO el tema real
               final config = ref.read(_temaEditadoProvider);
               ref.read(_temaEditadoProvider.notifier).state = _aplicarCampo(
                 config,

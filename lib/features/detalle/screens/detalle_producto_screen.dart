@@ -69,7 +69,6 @@ class _DetalleContent extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Imagen principal ───────────────────────
                 Container(
                   height: 300,
                   width: double.infinity,
@@ -102,7 +101,6 @@ class _DetalleContent extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ── Categoría ──────────────────────────
                       Text(
                         producto.categoriaNombre.toUpperCase(),
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
@@ -112,16 +110,12 @@ class _DetalleContent extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
-
-                      // ── Nombre ─────────────────────────────
                       Text(
                         producto.nombre,
                         style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 12),
-
-                      // ── Precio y stock ─────────────────────
                       Row(
                         children: [
                           Text(
@@ -161,7 +155,6 @@ class _DetalleContent extends ConsumerWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      // ── Descripción ────────────────────────
                       if (producto.descripcion != null) ...[
                         Text(
                           'Descripción',
@@ -177,10 +170,6 @@ class _DetalleContent extends ConsumerWidget {
                         ),
                         const SizedBox(height: 20),
                       ],
-
-                      // ── Botón Ver en 3D ────────────────────
-                      // En Android siempre visible (todos tienen AR)
-                      // En Windows visible pero abre visor web
                       BotonVer3D(
                         onTap: () =>
                             context.push('/producto/${producto.id}/ar'),
@@ -193,8 +182,6 @@ class _DetalleContent extends ConsumerWidget {
             ),
           ),
         ),
-
-        // ── Botón añadir al carrito (fijo abajo) ──────────
         Container(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
           decoration: BoxDecoration(

@@ -1,6 +1,5 @@
 class AppConstants {
-  // URLs base según plataforma (ya se gestiona en main.dart)
-  // Estas constantes son para referencia
+  // URLs base según plataforma 
   static const String baseUrlAndroid = 'http://10.0.2.2:8080';
   static const String baseUrlWindows = 'http://localhost:8080';
 

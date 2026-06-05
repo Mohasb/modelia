@@ -23,8 +23,6 @@ import 'package:modelia/features/admin/screens/admin_usuarios_screen.dart';
 import 'package:modelia/tools/icon-capture.dart';
 import 'package:modelia/visor-prueba.dart';
 
-// Listenable que solo notifica cuando cambian isLogueado o sesionExpirada
-// NO cuando cambia isLoading o error
 class _AuthRouterNotifier extends ChangeNotifier {
   _AuthRouterNotifier(this._ref) {
     _ref.listen<AuthState>(authProvider, (previous, next) {

@@ -108,7 +108,6 @@ class _PedidoAdminCard extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
 
-          // Cambiar estado
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(

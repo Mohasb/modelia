@@ -27,7 +27,6 @@ class _IconCaptureScreenState extends State<IconCaptureScreen> {
         return;
       }
 
-      // pixelRatio 4 = 1024x1024 sobre un widget de 256x256
       final image = await boundary.toImage(pixelRatio: 4.0);
       final byteData =
           await image.toByteData(format: ui.ImageByteFormat.png);
@@ -53,7 +52,6 @@ class _IconCaptureScreenState extends State<IconCaptureScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Widget que se captura — 256x256 con padding
             RepaintBoundary(
               key: _key,
               child: Container(

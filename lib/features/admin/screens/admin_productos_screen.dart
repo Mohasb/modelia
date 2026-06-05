@@ -169,7 +169,6 @@ class AdminProductosScreen extends ConsumerWidget {
   }
 }
 
-// ── Card de producto con botón destacado ──────────────────
 
 class _ProductoAdminCard extends StatelessWidget {
   final Producto producto;
@@ -199,7 +198,6 @@ class _ProductoAdminCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Imagen
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: SizedBox(
@@ -225,7 +223,6 @@ class _ProductoAdminCard extends StatelessWidget {
           ),
           const SizedBox(width: 12),
 
-          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,7 +268,6 @@ class _ProductoAdminCard extends StatelessWidget {
             ),
           ),
 
-          // Botón destacado
           IconButton(
             onPressed: onToggleDestacado,
             tooltip: producto.destacado
@@ -288,13 +284,11 @@ class _ProductoAdminCard extends StatelessWidget {
             ),
           ),
 
-          // Botón editar
           IconButton(
             onPressed: onEditar,
             icon: const Icon(Icons.edit_outlined, size: 20),
           ),
 
-          // Botón eliminar
           IconButton(
             onPressed: onEliminar,
             icon: Icon(
@@ -308,8 +302,6 @@ class _ProductoAdminCard extends StatelessWidget {
     );
   }
 }
-
-// ── Formulario producto ────────────────────────────────────
 
 class _FormularioProducto extends ConsumerStatefulWidget {
   final Producto? producto;

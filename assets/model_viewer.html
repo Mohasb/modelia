@@ -25,13 +25,10 @@
     shadow-intensity="1">
   </model-viewer>
   <script>
-    // Recibe la URL del modelo desde Flutter
     window.addEventListener('message', function(e) {
       const viewer = document.getElementById('viewer');
       viewer.src = e.data;
     });
-
-    // También acepta parámetro en la URL
     const params = new URLSearchParams(window.location.search);
     const src = params.get('src');
     if (src) {

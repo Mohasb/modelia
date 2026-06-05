@@ -22,7 +22,6 @@ class BotonVer3D extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Icono flechas circulares estilo IKEA
             Container(
               width: 36,
               height: 36,

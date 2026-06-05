@@ -64,7 +64,6 @@ class _UsuarioAdminCard extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          // Avatar
           Container(
             width: 44,
             height: 44,
@@ -85,7 +84,6 @@ class _UsuarioAdminCard extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
 
-          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +152,6 @@ class _UsuarioAdminCard extends ConsumerWidget {
             ),
           ),
 
-          // Acciones
           PopupMenuButton<String>(
             onSelected: (accion) async {
               try {

@@ -64,7 +64,6 @@ class _MisPedidosScreenState extends ConsumerState<MisPedidosScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Si el usuario cambió desde la última carga, recargar
     final authState = ref.read(authProvider);
     if (authState.id != _usuarioIdCargado && authState.isLogueado) {
       print(

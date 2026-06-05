@@ -73,8 +73,6 @@ class AppShell extends ConsumerWidget {
   }
 }
 
-// ── Android Shell ──────────────────────────────────────────
-
 class _AndroidShell extends StatelessWidget {
   final Widget child;
   final String appNombre;
@@ -120,8 +118,6 @@ class _AndroidShell extends StatelessWidget {
     );
   }
 }
-
-// ── Windows Shell ──────────────────────────────────────────
 
 class _WindowsShell extends StatelessWidget {
   final Widget child;
@@ -176,8 +172,6 @@ class _WindowsShell extends StatelessWidget {
     );
   }
 }
-
-// ── AppBar compartida ──────────────────────────────────────
 
 class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appNombre;
@@ -305,8 +299,6 @@ class _ModeliaAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-// ── Bottom Navigation Bar ──────────────────────────────────
-
 class _ModeliaBottomNav extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) onTap;
@@ -343,8 +335,6 @@ class _ModeliaBottomNav extends StatelessWidget {
     );
   }
 }
-
-// ── Navigation Rail (Windows) ──────────────────────────────
 
 class _ModeliaRail extends StatelessWidget {
   final int selectedIndex;

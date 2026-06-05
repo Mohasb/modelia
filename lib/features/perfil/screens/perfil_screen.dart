@@ -134,7 +134,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          // Avatar
           Center(
             child: Column(
               children: [
@@ -191,7 +190,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
           ),
           const SizedBox(height: 32),
 
-          // Datos
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -226,7 +224,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                 ),
                 const SizedBox(height: 16),
 
-                // Email (solo lectura)
                 _CampoInfo(
                   label: 'Email',
                   valor: widget.usuario.email,
@@ -234,7 +231,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                 ),
                 const SizedBox(height: 12),
 
-                // Nombre
                 if (_editando)
                   TextField(
                     controller: _nombreController,
@@ -251,7 +247,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
                   ),
                 const SizedBox(height: 12),
 
-                // Dirección
                 if (_editando)
                   TextField(
                     controller: _direccionController,
@@ -301,7 +296,6 @@ class _PerfilContentState extends ConsumerState<_PerfilContent> {
           ),
           const SizedBox(height: 16),
 
-          // Accesos rápidos
           _AccesoRapido(
             icon: Icons.receipt_long_outlined,
             label: 'Mis pedidos',

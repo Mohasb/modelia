@@ -36,7 +36,6 @@ class AdminDashboardScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Stats
               statsAsync.when(
                 data: (stats) => GridView.count(
                   crossAxisCount: isWindows ? 4 : 2,
@@ -79,7 +78,6 @@ class AdminDashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
 
-              // Accesos rápidos
               Text(
                 'Gestión',
                 style: Theme.of(

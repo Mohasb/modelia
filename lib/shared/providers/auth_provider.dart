@@ -12,7 +12,7 @@ class AuthState {
   final String? email;
   final int? id;
   final bool sesionExpirada;
-  final int version; // incrementa en cada login/logout
+  final int version;
 
   const AuthState({
     this.isLogueado = false,
@@ -88,7 +88,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         nombre: auth.nombre,
         email: auth.email,
         id: auth.id,
-        version: state.version + 1, // fuerza recalculo de providers
+        version: state.version + 1,
       );
     } catch (e) {
       print('[AUTH] Login fallido: $e');
@@ -119,7 +119,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     print('[AUTH] Logout - limpiando sesión');
     await _api.logout();
-    state = AuthState(version: state.version + 1); // fuerza recalculo
+    state = AuthState(version: state.version + 1); 
   }
 
   void sesionExpirada() {

@@ -30,7 +30,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
       await api.crearPedido(items);
 
-      // Invalidar caché de pedidos para que se recarguen
       ref.invalidate(misPedidosProvider);
 
       ref.read(carritoProvider.notifier).vaciar();
@@ -77,11 +76,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Info usuario
                   _SeccionUsuario(nombre: authState.nombre ?? ''),
                   const SizedBox(height: 20),
 
-                  // Lista de productos
                   Text(
                     'Productos',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -92,7 +89,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ...carrito.map((item) => _LineaProducto(item: item)),
                   const SizedBox(height: 20),
 
-                  // Nota mock pago
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -125,7 +121,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
           ),
 
-          // Total y confirmar
           Container(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
             decoration: BoxDecoration(
@@ -183,7 +178,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }
 }
 
-// ── Sección usuario ────────────────────────────────────────
 
 class _SeccionUsuario extends StatelessWidget {
   final String nombre;
@@ -242,7 +236,6 @@ class _SeccionUsuario extends StatelessWidget {
   }
 }
 
-// ── Línea de producto ──────────────────────────────────────
 
 class _LineaProducto extends StatelessWidget {
   final CarritoItem item;
@@ -283,7 +276,6 @@ class _LineaProducto extends StatelessWidget {
   }
 }
 
-// ── Pedido completado ──────────────────────────────────────
 
 class _PedidoCompletado extends ConsumerWidget {
   @override

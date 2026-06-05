@@ -79,7 +79,6 @@ class CarritoScreen extends ConsumerWidget {
   }
 }
 
-// ── Item del carrito ───────────────────────────────────────
 
 class _CarritoItemCard extends ConsumerWidget {
   final CarritoItem item;
@@ -97,7 +96,6 @@ class _CarritoItemCard extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          // Imagen
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: SizedBox(
@@ -126,7 +124,6 @@ class _CarritoItemCard extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
 
-          // Info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +145,6 @@ class _CarritoItemCard extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Selector cantidad
                 Row(
                   children: [
                     _BotonCantidad(
@@ -178,7 +174,6 @@ class _CarritoItemCard extends ConsumerWidget {
             ),
           ),
 
-          // Subtotal + eliminar
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -228,7 +223,6 @@ class _BotonCantidad extends StatelessWidget {
   }
 }
 
-// ── Resumen y checkout ─────────────────────────────────────
 
 class _ResumenCarrito extends ConsumerWidget {
   final double total;
@@ -288,8 +282,6 @@ class _ResumenCarrito extends ConsumerWidget {
     );
   }
 }
-
-// ── Carrito vacío ──────────────────────────────────────────
 
 class _CarritoVacio extends StatelessWidget {
   const _CarritoVacio();

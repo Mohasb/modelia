@@ -75,6 +75,5 @@ class TemaConfig {
     appNombre: json['appNombre'] ?? 'Modelia',
   );
 
-  // Resetear a valores por defecto
   static const TemaConfig porDefecto = TemaConfig();
 }

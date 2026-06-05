@@ -24,7 +24,6 @@ class ProductoCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Imagen fija ────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),
@@ -65,7 +64,6 @@ class ProductoCard extends ConsumerWidget {
               ),
             ),
 
-            // ── Info ───────────────────────────────────────
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),

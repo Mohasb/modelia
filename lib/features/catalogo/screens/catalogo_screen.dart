@@ -53,7 +53,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
     super.dispose();
   }
 
-  // Número de columnas responsive según el ancho disponible
   int _columnasPorAncho(double width) {
     if (width >= 1200) return 5;
     if (width >= 900) return 4;
@@ -76,15 +75,12 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
           ref.invalidate(_productosCatalogoProvider);
           ref.invalidate(destacadosProvider);
         },
-        // CustomScrollView permite que el slider y el grid compartan
-        // un solo scroll, eliminando el overflow y el scroll bloqueado
         child: LayoutBuilder(
           builder: (context, constraints) {
             final columnas = _columnasPorAncho(constraints.maxWidth);
 
             return CustomScrollView(
               slivers: [
-                // ── Banner slider destacados ──────────────
                 SliverToBoxAdapter(
                   child: destacadosAsync.when(
                     data: (destacados) => destacados.isEmpty
@@ -95,7 +91,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                   ),
                 ),
 
-                // ── Barra búsqueda ──────────────────────
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -130,7 +125,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                   ),
                 ),
 
-                // ── Chips categorías + ordenación ─────────
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
@@ -236,7 +230,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                   child: Divider(height: 0.5),
                 ),
 
-                // ── Grid productos responsive ─────────────
                 productosAsync.when(
                   data: (productos) => productos.isEmpty
                       ? const SliverFillRemaining(
@@ -286,7 +279,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
                   ),
                 ),
 
-                // Padding inferior
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
               ],
             );
@@ -310,7 +302,6 @@ class _CatalogoScreenState extends ConsumerState<CatalogoScreen> {
   }
 }
 
-// ── Slider de destacados ───────────────────────────────────
 
 class _SliderDestacados extends StatefulWidget {
   final List<Producto> productos;

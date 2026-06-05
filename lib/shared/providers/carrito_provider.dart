@@ -8,7 +8,6 @@ class CarritoNotifier extends StateNotifier<List<CarritoItem>> {
   void agregar(Producto producto) {
     final index = state.indexWhere((item) => item.producto.id == producto.id);
     if (index >= 0) {
-      // Ya existe, incrementar cantidad
       state = [
         for (int i = 0; i < state.length; i++)
           if (i == index)
@@ -61,14 +60,12 @@ final carritoProvider =
       (ref) => CarritoNotifier(),
     );
 
-// Provider conveniente para el total de items (para el badge del carrito)
 final carritoTotalItemsProvider = Provider<int>((ref) {
   final carrito = ref.watch(carritoProvider.notifier);
   ref.watch(carritoProvider);
   return carrito.totalItems;
 });
 
-// Provider para el precio total
 final carritoPrecioTotalProvider = Provider<double>((ref) {
   final carrito = ref.watch(carritoProvider.notifier);
   ref.watch(carritoProvider);

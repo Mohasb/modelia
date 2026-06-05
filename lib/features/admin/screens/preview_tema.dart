@@ -33,11 +33,9 @@ class _PreviewTemaState extends State<PreviewTema>
     super.dispose();
   }
 
-  // Cuando el config cambia desde fuera, reconstruimos
   @override
   void didUpdateWidget(PreviewTema oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // No necesitamos hacer nada — build() ya usa widget.config
   }
 
   @override
@@ -61,7 +59,6 @@ class _PreviewTemaState extends State<PreviewTema>
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          // ── AppBar mock ──────────────────────────────────
           Container(
             color: bg,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -73,7 +70,7 @@ class _PreviewTemaState extends State<PreviewTema>
                   _tabController.index == 0
                       ? widget
                             .config
-                            .appNombre // ← nombre dinámico
+                            .appNombre 
                       : _tabLabel(_tabController.index),
                   style: TextStyle(
                     color: text,
@@ -82,7 +79,6 @@ class _PreviewTemaState extends State<PreviewTema>
                   ),
                 ),
                 const Spacer(),
-                // Toggle dark/light — funcional
                 GestureDetector(
                   onTap: () => setState(() => _isDark = !_isDark),
                   child: Container(
@@ -141,7 +137,6 @@ class _PreviewTemaState extends State<PreviewTema>
             ),
           ),
 
-          // ── Tab content ──────────────────────────────────
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -178,7 +173,6 @@ class _PreviewTemaState extends State<PreviewTema>
             ),
           ),
 
-          // ── Bottom nav mock ──────────────────────────────
           Container(
             color: bg,
             padding: const EdgeInsets.symmetric(vertical: 6),
@@ -244,8 +238,6 @@ class _PreviewTemaState extends State<PreviewTema>
   }
 }
 
-// ── Nav item ───────────────────────────────────────────────
-
 class _NavItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -281,8 +273,6 @@ class _NavItem extends StatelessWidget {
     );
   }
 }
-
-// ── Tabs mock ──────────────────────────────────────────────
 
 class _TabHome extends StatelessWidget {
   final TemaConfig c;
@@ -764,8 +754,6 @@ class _TabPerfil extends StatelessWidget {
     );
   }
 }
-
-// ── Widgets reutilizables ──────────────────────────────────
 
 class _Chip extends StatelessWidget {
   final String label;

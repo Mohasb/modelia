@@ -28,7 +28,6 @@ class _VisorWindowsState extends State<VisorWindows> {
     try {
       await _controller.initialize();
 
-      // Copiar el HTML a un fichero temporal y cargarlo
       final htmlContent = await rootBundle.loadString(
         'assets/model_viewer.html',
       );
@@ -36,7 +35,6 @@ class _VisorWindowsState extends State<VisorWindows> {
       final htmlFile = File('${tempDir.path}/model_viewer.html');
       await htmlFile.writeAsString(htmlContent);
 
-      // Cargar el HTML con la URL del modelo como parámetro
       final encodedUrl = Uri.encodeComponent(widget.modelUrl);
       await _controller.loadUrl('file:///${htmlFile.path}?src=$encodedUrl');
 

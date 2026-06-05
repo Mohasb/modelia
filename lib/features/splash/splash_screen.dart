@@ -14,26 +14,21 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
-  // Logo: escala + fade in
   late AnimationController _logoController;
   late Animation<double> _logoScale;
   late Animation<double> _logoOpacity;
 
-  // Destello dorado
   late AnimationController _glowController;
   late Animation<double> _glowOpacity;
   late Animation<double> _glowScale;
 
-  // Texto: sube desde abajo + fade in
   late AnimationController _textoController;
   late Animation<double> _textoOpacity;
   late Animation<double> _textoOffset;
 
-  // Línea separadora
   late AnimationController _lineaController;
   late Animation<double> _lineaAncho;
 
-  // Fade out salida
   late AnimationController _exitController;
   late Animation<double> _exitOpacity;
 
@@ -48,7 +43,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     ]);
     _cargarTema();
 
-    // Logo
     _logoController = AnimationController(
       duration: const Duration(milliseconds: 900),
       vsync: this,
@@ -63,7 +57,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       ),
     );
 
-    // Glow
     _glowController = AnimationController(
       duration: const Duration(milliseconds: 700),
       vsync: this,
@@ -80,7 +73,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       end: 2.0,
     ).animate(CurvedAnimation(parent: _glowController, curve: Curves.easeOut));
 
-    // Línea
     _lineaController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -90,7 +82,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       end: 1.0,
     ).animate(CurvedAnimation(parent: _lineaController, curve: Curves.easeOut));
 
-    // Texto
     _textoController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
@@ -103,7 +94,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       CurvedAnimation(parent: _textoController, curve: Curves.easeOutCubic),
     );
 
-    // Exit
     _exitController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -123,23 +113,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _arrancarSecuencia() async {
-    // 1. Logo aparece con escala + fade
     await Future.delayed(const Duration(milliseconds: 200));
     _logoController.forward();
 
-    // 2. Destello dorado al completarse
     await Future.delayed(const Duration(milliseconds: 800));
     _glowController.forward();
 
-    // 3. Línea separadora se expande
     await Future.delayed(const Duration(milliseconds: 300));
     _lineaController.forward();
 
-    // 4. Texto sube desde abajo
     await Future.delayed(const Duration(milliseconds: 200));
     _textoController.forward();
 
-    // 5. Esperar y salir con fade
     await Future.delayed(const Duration(milliseconds: 1000));
     _exitController.forward();
     await Future.delayed(const Duration(milliseconds: 500));
@@ -180,14 +165,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ── Logo con glow ──────────────────────────
               AnimatedBuilder(
                 animation: Listenable.merge([_logoController, _glowController]),
                 builder: (context, _) {
                   return Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Halo dorado — destello
                       Opacity(
                         opacity: _glowOpacity.value,
                         child: Transform.scale(
@@ -203,7 +186,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         ),
                       ),
 
-                      // Halo interior más brillante
                       Opacity(
                         opacity: _glowOpacity.value * 1.5 > 1
                             ? 1
@@ -221,7 +203,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                         ),
                       ),
 
-                      // Logo
                       Opacity(
                         opacity: _logoOpacity.value,
                         child: Transform.scale(
@@ -241,7 +222,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
               const SizedBox(height: 32),
 
-              // ── Línea separadora dorada ────────────────
               AnimatedBuilder(
                 animation: _lineaController,
                 builder: (context, _) => Container(
@@ -253,7 +233,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
               const SizedBox(height: 24),
 
-              // ── Texto ──────────────────────────────────
               AnimatedBuilder(
                 animation: _textoController,
                 builder: (context, _) => Opacity(

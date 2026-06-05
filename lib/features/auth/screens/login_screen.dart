@@ -35,11 +35,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
       return;
     }
-    // Sin setState — usamos el isLoading del provider directamente
     await ref
         .read(authProvider.notifier)
         .login(_emailController.text.trim(), _passwordController.text);
-    // NO hacemos nada más aquí — ref.listen se encarga de la navegación y errores
   }
 
   @override
@@ -47,7 +45,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (!mounted) return;
 
-      // Mostrar error
       if (next.error != null && next.error != previous?.error) {
         print('[LOGIN_SCREEN] Mostrando error: ${next.error}');
         ScaffoldMessenger.of(context).clearSnackBars();
@@ -64,7 +61,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
       }
 
-      // Navegar tras login exitoso
       if (next.isLogueado && !(previous?.isLogueado ?? false)) {
         print('[LOGIN_SCREEN] Login exitoso, navegando...');
         ScaffoldMessenger.of(context).clearSnackBars();

@@ -13,11 +13,9 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
   late WebViewController _controller;
   bool _cargado = false;
 
-  // Animaciones disponibles — se rellenan desde el modelo
   List<String> _animaciones = [];
   String? _animacionSeleccionada;
 
-  // Colores predefinidos para probar
   final List<_ColorOpcion> _colores = [
     _ColorOpcion('Original', null),
     _ColorOpcion('Rojo', [1.0, 0.0, 0.0, 1.0]),
@@ -30,7 +28,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
   ];
   _ColorOpcion? _colorSeleccionado;
 
-  // Índice de material a modificar
   int _materialIndex = 0;
   int _totalMateriales = 1;
 
@@ -214,7 +211,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
       ),
       body: Column(
         children: [
-          // ── Visor 3D ─────────────────────────────────
           Expanded(
             flex: 6,
             child: Stack(
@@ -235,7 +231,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
             ),
           ),
 
-          // ── Controles ─────────────────────────────────
           Container(
             decoration: BoxDecoration(
               color: colorScheme.surface,
@@ -250,7 +245,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Animaciones ──────────────────────
                   Text(
                     'Animaciones',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -305,7 +299,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
 
                   const SizedBox(height: 16),
 
-                  // ── Material a modificar ─────────────
                   if (_totalMateriales > 1) ...[
                     Text(
                       'Material (${_materialIndex + 1}/$_totalMateriales)',
@@ -340,7 +333,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
                     const SizedBox(height: 8),
                   ],
 
-                  // ── Colores ──────────────────────────
                   Text(
                     'Color del material',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -408,7 +400,6 @@ class _VisorPruebaScreenState extends State<VisorPruebaScreen> {
 
                   const SizedBox(height: 8),
 
-                  // Info materiales
                   if (_cargado)
                     Text(
                       '$_totalMateriales material${_totalMateriales != 1 ? 'es' : ''} detectado${_totalMateriales != 1 ? 's' : ''} en el modelo',

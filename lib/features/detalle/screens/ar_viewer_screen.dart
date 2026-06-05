@@ -62,8 +62,6 @@ class _VisorAndroid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // El ModelViewer ocupa toda la pantalla
-        // El botón AR nativo aparece automáticamente dentro del visor
         Expanded(
           child: ModelViewer(
             src: modelUrl,
@@ -75,7 +73,6 @@ class _VisorAndroid extends StatelessWidget {
             shadowIntensity: 1,
           ),
         ),
-        // Panel inferior solo con texto informativo
         Container(
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
