@@ -15,9 +15,11 @@ void main() async {
       overrides: [
         apiServiceProvider.overrideWith((ref) {
           final api = ApiService(
-            baseUrl: defaultTargetPlatform == TargetPlatform.android
+            baseUrl: "https://modeliabackend-production.up.railway.app",
+            
+            /*defaultTargetPlatform == TargetPlatform.android
                 ? 'http://192.168.1.39:8080'
-                : 'http://localhost:8080',
+                : 'http://localhost:8080',*/
           );
           api.onSesionExpirada = () {
             ref.read(authProvider.notifier).sesionExpirada();
