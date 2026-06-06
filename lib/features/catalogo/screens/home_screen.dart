@@ -128,7 +128,6 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
   }
 }
 
-
 class _FlechaParpadeo extends StatefulWidget {
   const _FlechaParpadeo();
 
@@ -149,9 +148,10 @@ class _FlechaParpadeoState extends State<_FlechaParpadeo>
       vsync: this,
     )..repeat(reverse: true);
 
-    _opacityAnim = Tween<double>(begin: 0.2, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _opacityAnim = Tween<double>(
+      begin: 0.2,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -300,11 +300,22 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
 
     return isLandscape
         ? _buildLandscape(
-            context, p, colorScheme, tieneModelo, soportaModelo, esAndroid)
+            context,
+            p,
+            colorScheme,
+            tieneModelo,
+            soportaModelo,
+            esAndroid,
+          )
         : _buildPortrait(
-            context, p, colorScheme, tieneModelo, soportaModelo, esAndroid);
+            context,
+            p,
+            colorScheme,
+            tieneModelo,
+            soportaModelo,
+            esAndroid,
+          );
   }
-
 
   Widget _buildPortrait(
     BuildContext context,
@@ -329,13 +340,10 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
         if (!tieneModelo || !soportaModelo)
           _imagenSinModelo(p, colorScheme, alturaFoto + alturaModelo),
 
-        Expanded(
-          child: _infoYBotones(context, p, colorScheme),
-        ),
+        Expanded(child: _infoYBotones(context, p, colorScheme)),
       ],
     );
   }
-
 
   Widget _buildLandscape(
     BuildContext context,
@@ -357,18 +365,20 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
               if (tieneModelo && soportaModelo)
                 _mostrarModelo
                     ? (esAndroid
-                        ? ModelViewer(
-                            src: p.modeloGlbUrl!,
-                            alt: p.nombre,
-                            ar: true,
-                            arModes: const ['scene-viewer', 'webxr'],
-                            autoRotate: true,
-                            cameraControls: true,
-                            backgroundColor:
-                                const Color.fromARGB(0, 0, 0, 0),
-                            shadowIntensity: 0.6,
-                          )
-                        : VisorWindows(modelUrl: p.modeloGlbUrl!))
+                          ? ModelViewer(
+                              src: p.modeloGlbUrl!,
+                              alt: p.nombre,
+                              ar: true,
+                              arModes: const ['scene-viewer', 'webxr'],
+                              autoRotate: true,
+                              cameraControls: true,
+                              backgroundColor:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? const Color.fromARGB(255, 10, 10, 10)
+                                  : const Color.fromARGB(255, 245, 245, 247),
+                            )
+                          : VisorWindows(modelUrl: p.modeloGlbUrl!))
                     : Center(
                         child: CircularProgressIndicator(
                           color: AppTheme.accentGold.withValues(alpha: 0.5),
@@ -388,9 +398,11 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                   ),
                 )
               else
-                Icon(Icons.inventory_2_outlined,
-                    size: 48,
-                    color: colorScheme.onSurface.withValues(alpha: 0.3)),
+                Icon(
+                  Icons.inventory_2_outlined,
+                  size: 48,
+                  color: colorScheme.onSurface.withValues(alpha: 0.3),
+                ),
 
               Positioned(
                 top: 8,
@@ -398,7 +410,9 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                 child: IgnorePointer(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.accentGold,
                       borderRadius: BorderRadius.circular(6),
@@ -424,17 +438,20 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.view_in_ar_rounded,
-                            color: AppTheme.accentGold, size: 14),
+                        const Icon(
+                          Icons.view_in_ar_rounded,
+                          color: AppTheme.accentGold,
+                          size: 14,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           'Ver en realidad aumentada →',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppTheme.accentGold,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 10,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppTheme.accentGold,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 10,
+                              ),
                         ),
                       ],
                     ),
@@ -452,9 +469,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     );
   }
 
-
-  Widget _bandaFoto(
-      Producto p, ColorScheme colorScheme, double alturaFoto) {
+  Widget _bandaFoto(Producto p, ColorScheme colorScheme, double alturaFoto) {
     return SizedBox(
       height: alturaFoto,
       width: double.infinity,
@@ -466,8 +481,10 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           children: [
             IgnorePointer(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: AppTheme.accentGold,
                   borderRadius: BorderRadius.circular(8),
@@ -495,10 +512,11 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                     fit: BoxFit.cover,
                     errorWidget: (_, __, ___) => Container(
                       color: colorScheme.surface,
-                      child: Icon(Icons.image_not_supported_outlined,
-                          size: 20,
-                          color:
-                              colorScheme.onSurface.withValues(alpha: 0.3)),
+                      child: Icon(
+                        Icons.image_not_supported_outlined,
+                        size: 20,
+                        color: colorScheme.onSurface.withValues(alpha: 0.3),
+                      ),
                     ),
                   ),
                 ),
@@ -532,8 +550,10 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                     arModes: const ['scene-viewer', 'webxr'],
                     autoRotate: true,
                     cameraControls: true,
-                    backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                    shadowIntensity: 0.6,
+                    backgroundColor:
+                        Theme.of(context).brightness == Brightness.dark
+                        ? const Color.fromARGB(255, 10, 10, 10)
+                        : const Color.fromARGB(255, 245, 245, 247),
                   )
                 : VisorWindows(modelUrl: p.modeloGlbUrl!)
           else
@@ -564,16 +584,19 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.view_in_ar_rounded,
-                      color: AppTheme.accentGold, size: 16),
+                  const Icon(
+                    Icons.view_in_ar_rounded,
+                    color: AppTheme.accentGold,
+                    size: 16,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     'Ver en realidad aumentada →',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.accentGold,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 11,
-                        ),
+                      color: AppTheme.accentGold,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),
@@ -584,8 +607,7 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     );
   }
 
-  Widget _imagenSinModelo(
-      Producto p, ColorScheme colorScheme, double altura) {
+  Widget _imagenSinModelo(Producto p, ColorScheme colorScheme, double altura) {
     return SizedBox(
       height: altura,
       width: double.infinity,
@@ -607,9 +629,11 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           else
             Container(
               color: colorScheme.surfaceContainerHighest,
-              child: Icon(Icons.inventory_2_outlined,
-                  size: 64,
-                  color: colorScheme.onSurface.withValues(alpha: 0.3)),
+              child: Icon(
+                Icons.inventory_2_outlined,
+                size: 64,
+                color: colorScheme.onSurface.withValues(alpha: 0.3),
+              ),
             ),
           Positioned.fill(
             child: IgnorePointer(
@@ -630,8 +654,10 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
             left: 12,
             child: IgnorePointer(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: AppTheme.accentGold,
                   borderRadius: BorderRadius.circular(8),
@@ -661,18 +687,22 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
   }) {
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          landscape ? 16 : 20, 10, landscape ? 16 : 20, 0),
+        landscape ? 16 : 20,
+        10,
+        landscape ? 16 : 20,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             p.categoriaNombre.toUpperCase(),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppTheme.accentGold,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1,
-                  fontSize: 10,
-                ),
+              color: AppTheme.accentGold,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+              fontSize: 10,
+            ),
           ),
           const SizedBox(height: 2),
           Row(
@@ -682,8 +712,8 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                 child: Text(
                   p.nombre,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                    fontWeight: FontWeight.w700,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -695,13 +725,15 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
                   Text(
                     '${p.precio.toStringAsFixed(2)} €',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: AppTheme.accentGold,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      color: AppTheme.accentGold,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 6, vertical: 2),
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: p.stock > 0
                           ? Colors.green.withValues(alpha: 0.1)
@@ -728,9 +760,9 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
             Text(
               p.descripcion!,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurface.withValues(alpha: 0.55),
-                    height: 1.4,
-                  ),
+                color: colorScheme.onSurface.withValues(alpha: 0.55),
+                height: 1.4,
+              ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -790,32 +822,31 @@ class _SinDestacados extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.star_outline_rounded,
-                size: 56,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.3)),
+            Icon(
+              Icons.star_outline_rounded,
+              size: 56,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.3),
+            ),
             const SizedBox(height: 16),
             Text(
               'No hay productos destacados',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.5),
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
               'El administrador puede destacar\nproductos desde el panel',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.3),
-                  ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.3),
+              ),
             ),
           ],
         ),

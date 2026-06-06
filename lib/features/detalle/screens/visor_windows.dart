@@ -19,9 +19,11 @@ class _VisorWindowsState extends State<VisorWindows> {
   String? _error;
 
   @override
-  void initState() {
-    super.initState();
-    _inicializar();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inicializado && _error == null) {
+      _inicializar();
+    }
   }
 
   Future<void> _inicializar() async {
@@ -35,13 +37,26 @@ class _VisorWindowsState extends State<VisorWindows> {
       final htmlFile = File('${tempDir.path}/model_viewer.html');
       await htmlFile.writeAsString(htmlContent);
 
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      final themeParam = isDark ? "dark" : "light";
       final encodedUrl = Uri.encodeComponent(widget.modelUrl);
-      await _controller.loadUrl('file:///${htmlFile.path}?src=$encodedUrl');
+
+      await _controller.loadUrl(
+        'file:///${htmlFile.path}?src=$encodedUrl&theme=$themeParam',
+      );
 
       if (mounted) setState(() => _inicializado = true);
     } catch (e) {
       if (mounted) setState(() => _error = e.toString());
     }
+  }
+
+  Future<void> _cambiarTema(bool isDark) async {
+    final color = isDark ? "#0A0A0A" : "#F5F5F7";
+    await _controller.executeScript(
+      "document.body.style.background='$color';"
+      "document.getElementById('viewer').style.background='$color';",
+    );
   }
 
   @override
@@ -52,6 +67,12 @@ class _VisorWindowsState extends State<VisorWindows> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    if (_inicializado) {
+      _cambiarTema(isDark);
+    }
+
     if (_error != null) {
       return Center(
         child: Column(

@@ -8,6 +8,8 @@ import 'package:modelia/core/theme/app_theme.dart';
 
 import 'package:modelia/features/detalle/screens/visor_windows.dart'
     if (dart.library.js) 'package:modelia/features/detalle/screens/visor_stub.dart';
+import 'package:modelia/features/detalle/screens/visor_web.dart'
+    if (dart.library.io) 'visor_stub_web.dart';
 
 class ArViewerScreen extends ConsumerWidget {
   final int productoId;
@@ -34,9 +36,15 @@ class ArViewerScreen extends ConsumerWidget {
           if (modelUrl == null || modelUrl.isEmpty) {
             return const _SinModelo();
           }
+          // Web
+          if (kIsWeb) {
+            return VisorWeb(modelUrl: modelUrl);
+          }
+          // Android
           if (defaultTargetPlatform == TargetPlatform.android) {
             return _VisorAndroid(modelUrl: modelUrl, nombre: producto.nombre);
           }
+          // Windows
           return VisorWindows(modelUrl: modelUrl);
         },
         loading: () => const Center(
@@ -70,7 +78,9 @@ class _VisorAndroid extends StatelessWidget {
             arModes: const ['scene-viewer', 'webxr'],
             autoRotate: true,
             cameraControls: true,
-            shadowIntensity: 1,
+            backgroundColor: Theme.of(context).brightness == Brightness.dark
+                ? const Color.fromARGB(255, 10, 10, 10)
+                : const Color.fromARGB(255, 245, 245, 247),
           ),
         ),
         Container(
