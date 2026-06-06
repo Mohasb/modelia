@@ -365,18 +365,27 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
               if (tieneModelo && soportaModelo)
                 _mostrarModelo
                     ? (esAndroid
-                          ? ModelViewer(
-                              src: p.modeloGlbUrl!,
-                              alt: p.nombre,
-                              ar: true,
-                              arModes: const ['scene-viewer', 'webxr'],
-                              autoRotate: true,
-                              cameraControls: true,
-                              backgroundColor:
+                          ? Container(
+                              color:
                                   Theme.of(context).brightness ==
                                       Brightness.dark
-                                  ? const Color.fromARGB(255, 10, 10, 10)
-                                  : const Color.fromARGB(255, 245, 245, 247),
+                                  ? const Color(0xFF0A0A0A)
+                                  : const Color(0xFFF5F5F7),
+                              child: ModelViewer(
+                                key: ValueKey(Theme.of(context).brightness),
+                                src: p.modeloGlbUrl!,
+                                alt: p.nombre,
+                                ar: true,
+                                arModes: const ['scene-viewer', 'webxr'],
+                                autoRotate: true,
+                                cameraControls: true,
+                                backgroundColor:
+                                    Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? const Color.fromARGB(255, 10, 10, 10)
+                                    : const Color.fromARGB(255, 245, 245, 247),
+                                poster: p.imagenUrl,
+                              ),
                             )
                           : VisorWindows(modelUrl: p.modeloGlbUrl!))
                     : Center(
@@ -543,17 +552,24 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
           Container(color: colorScheme.surfaceContainerHighest),
           if (_mostrarModelo)
             esAndroid
-                ? ModelViewer(
-                    src: p.modeloGlbUrl!,
-                    alt: p.nombre,
-                    ar: true,
-                    arModes: const ['scene-viewer', 'webxr'],
-                    autoRotate: true,
-                    cameraControls: true,
-                    backgroundColor:
-                        Theme.of(context).brightness == Brightness.dark
-                        ? const Color.fromARGB(255, 10, 10, 10)
-                        : const Color.fromARGB(255, 245, 245, 247),
+                ? Container(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? const Color(0xFF0A0A0A)
+                        : const Color(0xFFF5F5F7),
+                    child: ModelViewer(
+                      key: ValueKey(Theme.of(context).brightness),
+                      src: p.modeloGlbUrl!,
+                      alt: p.nombre,
+                      ar: true,
+                      arModes: const ['scene-viewer', 'webxr'],
+                      autoRotate: true,
+                      cameraControls: true,
+                      backgroundColor:
+                          Theme.of(context).brightness == Brightness.dark
+                          ? const Color.fromARGB(255, 10, 10, 10)
+                          : const Color.fromARGB(255, 245, 245, 247),
+                      poster: p.imagenUrl,
+                    ),
                   )
                 : VisorWindows(modelUrl: p.modeloGlbUrl!)
           else

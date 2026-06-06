@@ -42,7 +42,11 @@ class ArViewerScreen extends ConsumerWidget {
           }
           // Android
           if (defaultTargetPlatform == TargetPlatform.android) {
-            return _VisorAndroid(modelUrl: modelUrl, nombre: producto.nombre);
+            return _VisorAndroid(
+              modelUrl: modelUrl,
+              nombre: producto.nombre,
+              imagen: producto.imagenUrl,
+            );
           }
           // Windows
           return VisorWindows(modelUrl: modelUrl);
@@ -64,23 +68,34 @@ class ArViewerScreen extends ConsumerWidget {
 class _VisorAndroid extends StatelessWidget {
   final String modelUrl;
   final String nombre;
-  const _VisorAndroid({required this.modelUrl, required this.nombre});
+  final String? imagen;
+  const _VisorAndroid({
+    required this.modelUrl,
+    required this.nombre,
+    this.imagen,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: ModelViewer(
-            src: modelUrl,
-            alt: nombre,
-            ar: true,
-            arModes: const ['scene-viewer', 'webxr'],
-            autoRotate: true,
-            cameraControls: true,
-            backgroundColor: Theme.of(context).brightness == Brightness.dark
-                ? const Color.fromARGB(255, 10, 10, 10)
-                : const Color.fromARGB(255, 245, 245, 247),
+          child: Container(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF0A0A0A)
+                : const Color(0xFFF5F5F7),
+            child: ModelViewer(
+              src: modelUrl,
+              alt: nombre,
+              ar: true,
+              arModes: const ['scene-viewer', 'webxr'],
+              autoRotate: true,
+              cameraControls: true,
+              backgroundColor: Theme.of(context).brightness == Brightness.dark
+                  ? const Color.fromARGB(255, 10, 10, 10)
+                  : const Color.fromARGB(255, 245, 245, 247),
+              poster: imagen,
+            ),
           ),
         ),
         Container(
