@@ -20,10 +20,13 @@ class _VisorWebState extends State<VisorWeb> {
     _viewId = 'model-viewer-${widget.modelUrl.hashCode}';
 
     ui.platformViewRegistry.registerViewFactory(_viewId, (int viewId) {
-      final script = web.document.createElement('script') as web.HTMLScriptElement;
-      script.type = 'module';
-      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-      web.document.head!.appendChild(script);
+      // Solo si <model-viewer> no está ya registrado (web/index.html ya lo carga)
+      if (web.window.customElements.get('model-viewer') == null) {
+        final script = web.document.createElement('script') as web.HTMLScriptElement;
+        script.type = 'module';
+        script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+        web.document.head!.appendChild(script);
+      }
 
       final mv = web.document.createElement('model-viewer') as web.HTMLElement;
       mv.setAttribute('src', widget.modelUrl);
