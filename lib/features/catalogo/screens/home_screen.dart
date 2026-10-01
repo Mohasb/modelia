@@ -302,8 +302,10 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
     final p = widget.producto;
     final colorScheme = Theme.of(context).colorScheme;
     final tieneModelo = p.modeloGlbUrl != null && p.modeloGlbUrl!.isNotEmpty;
-    final esAndroid = defaultTargetPlatform == TargetPlatform.android;
-    final esWindows = defaultTargetPlatform == TargetPlatform.windows;
+    // En web se usa el mismo visor que en Android (<model-viewer>): el visor de
+    // Windows (webview_windows) no existe en el navegador, aunque este corra en Windows.
+    final esAndroid = kIsWeb || defaultTargetPlatform == TargetPlatform.android;
+    final esWindows = !kIsWeb && defaultTargetPlatform == TargetPlatform.windows;
     final soportaModelo = esAndroid || esWindows;
 
     final isLandscape =
