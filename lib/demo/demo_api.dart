@@ -99,11 +99,15 @@ class _DemoDb {
   int nextId(Iterable<int> ids) => ids.fold(0, max) + 1;
 }
 
+// Tokens simulados. Más de 20 caracteres: ApiService registra en el log los 20 primeros.
+const _tokenDemo = 'demo-access-token-modelia';
+const _refreshDemo = 'demo-refresh-token-modelia';
+
 /// Sesión del usuario demo (lo que guardaría AuthService tras un login).
 Future<void> iniciarSesionDemo() async {
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('access_token', 'demo.2');
-  await prefs.setString('refresh_token', 'demo-refresh.2');
+  await prefs.setString('access_token', '$_tokenDemo.2');
+  await prefs.setString('refresh_token', '$_refreshDemo.2');
   await prefs.setString('usuario_email', demoEmail);
   await prefs.setString('usuario_nombre', 'Usuario Demo');
   await prefs.setString('usuario_rol', 'CLIENTE');
@@ -198,8 +202,8 @@ class DemoClient extends http.BaseClient {
       };
 
   Map<String, dynamic> _jwt(_Usuario u) => {
-        'accessToken': 'demo.${u.id}',
-        'refreshToken': 'demo-refresh.${u.id}',
+        'accessToken': '$_tokenDemo.${u.id}',
+        'refreshToken': '$_refreshDemo.${u.id}',
         'tipo': 'Bearer',
         'id': u.id,
         'nombre': u.nombre,
@@ -207,10 +211,10 @@ class DemoClient extends http.BaseClient {
         'rol': u.rol,
       };
 
-  /// Usuario del token «Bearer demo.<id>» (null si no hay sesión → 403, como Spring Security).
+  /// Usuario del token «Bearer …<id>» (null si no hay sesión → 403, como Spring Security).
   _Usuario? _actual(http.BaseRequest req) {
     final t = req.headers['Authorization'] ?? req.headers['authorization'] ?? '';
-    final m = RegExp(r'demo\.(\d+)$').firstMatch(t);
+    final m = RegExp(r'^Bearer .*\.(\d+)$').firstMatch(t);
     return m == null ? null : _db.usuario(int.parse(m.group(1)!));
   }
 
