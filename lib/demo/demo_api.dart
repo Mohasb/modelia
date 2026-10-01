@@ -103,9 +103,11 @@ class _DemoDb {
 const _tokenDemo = 'demo-access-token-modelia';
 const _refreshDemo = 'demo-refresh-token-modelia';
 
-/// Sesión del usuario demo (lo que guardaría AuthService tras un login).
+/// Sesión del usuario demo (lo que guardaría AuthService tras un login). Si ya hay una
+/// sesión de la demo (p. ej. alguien entró como administrador y recargó), se respeta.
 Future<void> iniciarSesionDemo() async {
   final prefs = await SharedPreferences.getInstance();
+  if (prefs.getString('access_token')?.startsWith(_tokenDemo) ?? false) return;
   await prefs.setString('access_token', '$_tokenDemo.2');
   await prefs.setString('refresh_token', '$_refreshDemo.2');
   await prefs.setString('usuario_email', demoEmail);
