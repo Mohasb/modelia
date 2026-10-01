@@ -160,8 +160,19 @@ class DemoClient extends http.BaseClient {
     return url;
   }
 
+  // Modelos de relleno: en la base de datos, los productos sin modelo propio apuntan al
+  // astronauta. En la demo se muestran sin 3D (solo foto), salvo el traje espacial, que
+  // sí es ese modelo.
+  static const _modelosRelleno = ['NeilArmstrong.glb', 'Astronaut.glb'];
+  String? _glbProducto(Map<String, dynamic> p) {
+    final url = p['modeloGlbUrl'] as String?;
+    final relleno = url != null && _modelosRelleno.any(url.endsWith);
+    if (relleno && !'${p['nombre']}'.contains('Neil Armstrong')) return null;
+    return _glbDemo(url);
+  }
+
   Map<String, dynamic> _productoResponse(Map<String, dynamic> p) {
-    final glb = _glbDemo(p['modeloGlbUrl'] as String?);
+    final glb = _glbProducto(p);
     return {
       'id': p['id'],
       'nombre': p['nombre'],
