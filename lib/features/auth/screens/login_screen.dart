@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modelia/shared/providers/auth_provider.dart';
 import 'package:modelia/core/theme/app_theme.dart';
+import 'package:modelia/demo/demo_api.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   final String? redirectTo;
@@ -38,6 +39,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     await ref
         .read(authProvider.notifier)
         .login(_emailController.text.trim(), _passwordController.text);
+  }
+
+  // Modo demo: entrada rápida con los usuarios de prueba
+  Future<void> _entrarDemo(String email, String password) {
+    _emailController.text = email;
+    _passwordController.text = password;
+    return _login();
   }
 
   @override
@@ -219,6 +227,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ],
               ),
+              if (kDemo) ...[
+                const SizedBox(height: 32),
+                const Divider(),
+                const SizedBox(height: 16),
+                Text(
+                  'Modo demo: entra con un usuario de prueba',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: authState.isLoading
+                            ? null
+                            : () => _entrarDemo(demoEmail, demoPassword),
+                        icon: const Icon(Icons.person_outline_rounded, size: 18),
+                        label: const Text('Cliente'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: authState.isLoading
+                            ? null
+                            : () => _entrarDemo(demoAdminEmail, demoAdminPassword),
+                        icon: const Icon(
+                          Icons.admin_panel_settings_outlined,
+                          size: 18,
+                        ),
+                        label: const Text('Administrador'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),

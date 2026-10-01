@@ -18,6 +18,10 @@ const bool kDemo = bool.fromEnvironment('DEMO');
 const demoEmail = 'demo@example.com';
 const demoPassword = 'Demo1234';
 
+/// Administrador de la demo (botón en el login): panel, productos, pedidos y editor de temas.
+const demoAdminEmail = 'admin@example.com';
+const demoAdminPassword = 'Admin1234';
+
 class _Usuario {
   _Usuario(this.id, this.nombre, this.email, this.password, this.rol,
       {this.direccion, DateTime? createdAt})
@@ -52,7 +56,7 @@ class _DemoDb {
     categorias = (jsonDecode(demoCategoriasJson) as List).cast<Map<String, dynamic>>();
     productos = (jsonDecode(demoProductosJson) as List).cast<Map<String, dynamic>>();
     usuarios = [
-      _Usuario(1, 'Admin Demo', 'admin@example.com', 'Admin1234', 'ADMIN'),
+      _Usuario(1, 'Admin Demo', demoAdminEmail, demoAdminPassword, 'ADMIN'),
       _Usuario(2, 'Usuario Demo', demoEmail, demoPassword, 'CLIENTE',
           direccion: 'Calle Mayor 1, 03001 Alicante'),
       _Usuario(3, 'Laura Ejemplo', 'laura@example.com', 'Demo1234', 'CLIENTE'),
@@ -132,8 +136,26 @@ class DemoClient extends http.BaseClient {
   _R _ok(Object? body, [int status = 200]) => _R(status, body);
   _R _error(String mensaje, [int status = 400]) => _R(status, {'mensaje': mensaje});
 
+  // Modelos 3D muy pesados (19-63 MB): la demo usa copias optimizadas (texturas a
+  // 2048 px en JPEG y geometría Draco) que se publican junto a la web, en demo-models/.
+  static const _modelosLigeros = {
+    'electronica/cafetera/cafetera.glb': 'cafetera.glb',
+    'calzado/trekking/trekking.glb': 'trekking.glb',
+    'electronica/roland/roland.glb': 'roland.glb',
+    'hogar/silla/silla.glb': 'silla.glb',
+    'electronica/sony/sony.glb': 'sony.glb',
+    'electronica/maxell/maxel.glb': 'maxel.glb',
+  };
+  String? _glbDemo(String? url) {
+    if (url == null) return null;
+    for (final e in _modelosLigeros.entries) {
+      if (url.endsWith(e.key)) return 'demo-models/${e.value}';
+    }
+    return url;
+  }
+
   Map<String, dynamic> _productoResponse(Map<String, dynamic> p) {
-    final glb = p['modeloGlbUrl'] as String?;
+    final glb = _glbDemo(p['modeloGlbUrl'] as String?);
     return {
       'id': p['id'],
       'nombre': p['nombre'],
