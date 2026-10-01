@@ -394,7 +394,7 @@ class ApiService {
     final response = await _ejecutar(
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/usuarios/$id/toggle-activo'),
-        headers: headers,
+        headers: {...headers, 'Content-Type': 'application/json'},
       ),
     );
     _checkResponse(response);
@@ -407,7 +407,7 @@ class ApiService {
       (headers) => http.put(
         Uri.parse('$baseUrl/api/admin/usuarios/$id/rol'),
         headers: headers,
-        body: jsonEncode({'rol': rol}),
+        body: jsonEncode({'estado': rol}),
       ),
     );
     _checkResponse(response);

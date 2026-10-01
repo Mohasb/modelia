@@ -45,6 +45,12 @@ class _VisorWindowsState extends State<VisorWindows> {
         'file:///${htmlFile.path}?src=$encodedUrl&theme=$themeParam',
       );
 
+      // Esperar a que la página cargue antes de aplicar el tema
+      await Future.delayed(const Duration(milliseconds: 800));
+      if (mounted) {
+        await _cambiarTema(Theme.of(context).brightness == Brightness.dark);
+      }
+
       if (mounted) setState(() => _inicializado = true);
     } catch (e) {
       if (mounted) setState(() => _error = e.toString());
@@ -55,7 +61,9 @@ class _VisorWindowsState extends State<VisorWindows> {
     final color = isDark ? "#0A0A0A" : "#F5F5F7";
     await _controller.executeScript(
       "document.body.style.background='$color';"
-      "document.getElementById('viewer').style.background='$color';",
+      "document.body.style.backgroundColor='$color';"
+      "var v=document.getElementById('viewer');"
+      "if(v){v.style.background='$color';v.style.backgroundColor='$color';}",
     );
   }
 

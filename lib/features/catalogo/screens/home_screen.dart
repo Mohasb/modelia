@@ -89,8 +89,15 @@ class _VistaDestacadosState extends State<_VistaDestacados> {
             producto: widget.productos[index],
             esVisible: index == _paginaActual,
             hayMasProductos: index < widget.productos.length - 1,
+            hayProductoAnterior: index > 0,
             onSiguientePagina: () {
               _pageController.nextPage(
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
+              );
+            },
+            onPaginaAnterior: () {
+              _pageController.previousPage(
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOut,
               );
@@ -235,13 +242,17 @@ class _PaginaProducto extends ConsumerStatefulWidget {
   final Producto producto;
   final bool esVisible;
   final bool hayMasProductos;
+  final bool hayProductoAnterior;
   final VoidCallback? onSiguientePagina;
+  final VoidCallback? onPaginaAnterior;
 
   const _PaginaProducto({
     required this.producto,
     required this.esVisible,
     required this.hayMasProductos,
+    required this.hayProductoAnterior,
     this.onSiguientePagina,
+    this.onPaginaAnterior,
   });
 
   @override
@@ -721,6 +732,21 @@ class _PaginaProductoState extends ConsumerState<_PaginaProducto> {
             ),
           ),
           const SizedBox(height: 2),
+          if (widget.hayProductoAnterior &&
+              defaultTargetPlatform == TargetPlatform.windows)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Center(
+                child: GestureDetector(
+                  onTap: widget.onPaginaAnterior,
+                  child: const Icon(
+                    Icons.keyboard_arrow_up_rounded,
+                    size: 36,
+                    color: AppTheme.accentGold,
+                  ),
+                ),
+              ),
+            ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

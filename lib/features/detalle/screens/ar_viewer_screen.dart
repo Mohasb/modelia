@@ -85,6 +85,7 @@ class _VisorAndroid extends StatelessWidget {
                 ? const Color(0xFF0A0A0A)
                 : const Color(0xFFF5F5F7),
             child: ModelViewer(
+              key: ValueKey(Theme.of(context).brightness),
               src: modelUrl,
               alt: nombre,
               ar: true,
@@ -94,7 +95,6 @@ class _VisorAndroid extends StatelessWidget {
               backgroundColor: Theme.of(context).brightness == Brightness.dark
                   ? const Color.fromARGB(255, 10, 10, 10)
                   : const Color.fromARGB(255, 245, 245, 247),
-              poster: imagen,
             ),
           ),
         ),
