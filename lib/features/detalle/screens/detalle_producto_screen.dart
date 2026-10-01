@@ -170,11 +170,14 @@ class _DetalleContent extends ConsumerWidget {
                         ),
                         const SizedBox(height: 20),
                       ],
-                      BotonVer3D(
-                        onTap: () =>
-                            context.push('/producto/${producto.id}/ar'),
-                      ),
-                      const SizedBox(height: 24),
+                      // Solo si el producto tiene modelo 3D (como en la pantalla de inicio)
+                      if (producto.tieneAr) ...[
+                        BotonVer3D(
+                          onTap: () =>
+                              context.push('/producto/${producto.id}/ar'),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
                     ],
                   ),
                 ),
